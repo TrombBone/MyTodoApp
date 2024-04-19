@@ -64,6 +64,27 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    /**
+     * Custom Material transitions animation into the container (fragment)
+     * for navigation between fragments
+     *
+     * @param id - drawing View Id (navigationHostFragment)
+     */
+    /*fun baseContainerTransform(@IdRes id: Int = R.id.navigationHostFragment) =
+        MaterialContainerTransform().apply {
+            drawingViewId = id
+            duration = TRANSITION_DURATION
+            scrimColor = Color.TRANSPARENT
+            fadeMode = MaterialContainerTransform.FADE_MODE_OUT
+            interpolator = FastOutSlowInInterpolator()
+            setAllContainerColors(
+                MaterialColors.getColor(
+                    requireContext(), R.attr.colorSurface,
+                    ContextCompat.getColor(requireContext(), R.color.theme_background)
+                )
+            )
+        }*/
+
     companion object {
         const val TRANSITION_DURATION = 300L
         const val TRANSITION_ELEMENT_ROOT = "transition:root:"

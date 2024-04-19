@@ -4,12 +4,18 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import com.example.mytodoapp.R
 import com.example.mytodoapp.utils.MySharedPreferenceManager
 
 abstract class BaseActivity : AppCompatActivity() {
 
+    lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         // TODO something difference if need
     }
 

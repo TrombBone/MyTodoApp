@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemTask"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/taskReadyCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/leftBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left"
+        app:constraint_referenced_ids="taskTitleEditText,taskDetailsEditText,taskDataTimeChip"
+        app:layout_constraintStart_toEndOf="@id/taskReadyCheckBox" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/taskTitleEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/taskStaredCheckBox"
+        app:layout_constraintStart_toEndOf="@+id/taskReadyCheckBox"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Task 1" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/taskDetailsEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/taskStaredCheckBox"
+        app:layout_constraintStart_toEndOf="@+id/taskReadyCheckBox"
+        app:layout_constraintTop_toBottomOf="@id/taskTitleEditText"
+        tools:text="Task 1 discr" />
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/taskDataTimeChip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.Material3.Chip.Suggestion"
+        app:layout_constraintStart_toEndOf="@+id/taskReadyCheckBox"
+        app:layout_constraintTop_toBottomOf="@+id/taskDetailsEditText"
+        tools:text="today at 18:00" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/rightBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right"
+        app:constraint_referenced_ids="taskTitleEditText,taskDetailsEditText,taskDataTimeChip"
+        app:layout_constraintEnd_toStartOf="@id/taskStaredCheckBox" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/taskStaredCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:buttonIcon="@drawable/ic_star_outline_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
