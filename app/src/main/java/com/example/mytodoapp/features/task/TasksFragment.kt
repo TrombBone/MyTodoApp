@@ -1,11 +1,10 @@
 package com.example.mytodoapp.features.task
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.mytodoapp.R
+import androidx.fragment.app.viewModels
 import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.databinding.FragmentTasksBinding
 

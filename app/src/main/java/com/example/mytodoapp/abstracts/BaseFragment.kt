@@ -70,7 +70,7 @@ abstract class BaseFragment : Fragment() {
      *
      * @param id - drawing View Id (navigationHostFragment)
      */
-    /*fun baseContainerTransform(@IdRes id: Int = R.id.navigationHostFragment) =
+    fun baseContainerTransform(@IdRes id: Int = R.id.nav_host_fragment) =
         MaterialContainerTransform().apply {
             drawingViewId = id
             duration = TRANSITION_DURATION
@@ -79,11 +79,11 @@ abstract class BaseFragment : Fragment() {
             interpolator = FastOutSlowInInterpolator()
             setAllContainerColors(
                 MaterialColors.getColor(
-                    requireContext(), R.attr.colorSurface,
-                    ContextCompat.getColor(requireContext(), R.color.theme_background)
+                    requireContext(), com.google.android.material.R.attr.colorSurface,
+                    ContextCompat.getColor(requireContext(), androidx.appcompat.R.color.background_material_dark)
                 )
             )
-        }*/
+        }
 
     companion object {
         const val TRANSITION_DURATION = 300L

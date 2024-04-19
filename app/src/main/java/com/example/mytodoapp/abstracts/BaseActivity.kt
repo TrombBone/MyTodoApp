@@ -5,8 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import com.example.mytodoapp.R
 import com.example.mytodoapp.utils.MySharedPreferenceManager
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -25,8 +23,10 @@ abstract class BaseActivity : AppCompatActivity() {
         when (MySharedPreferenceManager(this).theme) {
             MySharedPreferenceManager.Theme.LIGHT ->
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
             MySharedPreferenceManager.Theme.DARK ->
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
             MySharedPreferenceManager.Theme.SYSTEM -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)

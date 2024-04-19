@@ -1,9 +1,7 @@
 package com.example.mytodoapp.core.activity
 
 import android.os.Bundle
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseActivity
 
