@@ -1,13 +1,9 @@
 package com.example.mytodoapp.features.task
 
-import android.app.Dialog
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -17,13 +13,8 @@ import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.database.AppDatabase
 import com.example.mytodoapp.database.dao.TaskDAO
-import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
 import com.example.mytodoapp.databinding.FragmentTasksBinding
 import com.example.mytodoapp.features.task.viewpager.ItemTasksRecyclerPageFragment
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.SAVE_ALL
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -63,9 +54,11 @@ class TasksFragment : BaseFragment(), TaskAdapter.TaskStatusListener {
                     0 -> {
                         tab.setIcon(R.drawable.ic_star_fill_24)
                     }
+
                     1 -> {
                         tab.text = "My tasks"
                     }
+
                     else -> {
                         tab.setIcon(R.drawable.ic_add_24)
                     }

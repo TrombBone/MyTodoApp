@@ -12,10 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class EditTaskFragment : BaseFragment() {
 
-    companion object {
-        fun newInstance() = EditTaskFragment()
-    }
-
     private val viewModel: EditTaskViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -3,14 +3,11 @@ package com.example.mytodoapp.abstracts
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
-import android.widget.FrameLayout
-import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.R.id.design_bottom_sheet
 
-abstract class BaseBottomSheet() : BottomSheetDialogFragment() { //private val manager: FragmentManager
+abstract class BaseBottomSheet() : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         this.dialog?.setOnShowListener {
