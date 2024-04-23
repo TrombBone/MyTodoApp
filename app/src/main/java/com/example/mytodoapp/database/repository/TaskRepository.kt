@@ -21,7 +21,7 @@ class TaskRepository @Inject constructor(
 
     suspend fun fetchCount(): Int = tasks.fetchCount()
 
-    suspend fun checkNameUniqueness(name: String?, id: String?): List<String> = tasks.checkNameUniqueness(name, id)
+    suspend fun checkTitleUniqueness(title: String?, id: String?): List<String> = tasks.checkTitleUniqueness(title, id)
 
     suspend fun fetchSelectedGroup(group: String): List<Task> = tasks.fetchSelectGroup(group)
 
@@ -32,12 +32,10 @@ class TaskRepository @Inject constructor(
 
     suspend fun insert(task: Task) {
         tasks.insert(task)
-
     }
 
     suspend fun remove(task: Task) {
         tasks.remove(task)
-
     }
 
     suspend fun update(task: Task) {

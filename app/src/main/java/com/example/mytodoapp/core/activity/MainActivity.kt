@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

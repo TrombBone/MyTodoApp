@@ -3,6 +3,7 @@
     <string name="app_name">Напоминалка</string>
 
     <!-- used for concat and formatting -->
+    <string name="tasks_list_name">Задачи</string>
     <string name="and">&#160; и &#160;</string>
     <string name="yesterday">Вчера</string>
     <string name="yesterday_at">Вчера на %1$s</string>

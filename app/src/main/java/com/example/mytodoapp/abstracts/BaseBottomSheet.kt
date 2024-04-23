@@ -1,0 +1,29 @@
+package com.example.mytodoapp.abstracts
+
+import android.app.Dialog
+import android.os.Bundle
+import android.view.View
+import android.widget.FrameLayout
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.R.id.design_bottom_sheet
+
+abstract class BaseBottomSheet() : BottomSheetDialogFragment() { //private val manager: FragmentManager
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        this.dialog?.setOnShowListener {
+            val bottomSheetDialog = this.dialog as BottomSheetDialog
+            with(bottomSheetDialog.behavior) {
+                state = BottomSheetBehavior.STATE_EXPANDED
+                saveFlags = BottomSheetBehavior.SAVE_ALL
+            }
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        BottomSheetDialog(requireContext(), theme)
+
+}

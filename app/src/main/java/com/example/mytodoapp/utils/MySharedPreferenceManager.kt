@@ -64,12 +64,6 @@ class MySharedPreferenceManager(private val context: Context) {
     val taskReminder: Boolean
         get() = sharedPreference.getBoolean(PREFERENCE_TASK_NOTIFICATION, true)
 
-    val eventReminder: Boolean
-        get() = sharedPreference.getBoolean(PREFERENCE_EVENT_NOTIFICATION, true)
-
-    val subjectReminder: Boolean
-        get() = sharedPreference.getBoolean(PREFERENCE_COURSE_NOTIFICATION, true)
-
     val useExternalBrowser: Boolean
         get() = sharedPreference.getBoolean(PREFERENCE_USE_EXTERNAL_BROWSER, false)
 

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Todo</string>
 
+    <string name="tasks_list_name">Tasks</string>
+
     <!-- used for concat and formatting -->
     <string name="and">&#160;and&#160;</string>
     <string name="yesterday_at">Yesterday at %1$s</string>

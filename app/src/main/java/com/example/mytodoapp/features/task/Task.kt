@@ -18,17 +18,15 @@ import java.time.ZonedDateTime
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-@Entity(
-    tableName = "tasks",
-)
+@Entity
 data class Task @JvmOverloads constructor(
     @PrimaryKey
     @ColumnInfo(index = true)
     var taskID: String = "", //TODO: Get random ID like as UUID
     var groupID: String = "", //TODO: Get ID count groups or just string group name
-    var name: String? = null,
-    var notes: String? = null,
-    var isImportant: Boolean = false,
+    var title: String? = null,
+    var details: String? = null,
+    var isStared: Boolean = false,
     @TypeConverters(DateTimeConverter::class)
     var dueDate: ZonedDateTime? = null,
     var isFinished: Boolean = false,
