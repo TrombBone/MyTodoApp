@@ -1,7 +1,6 @@
 package com.example.mytodoapp.features.task.viewpager
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,7 @@ import com.example.mytodoapp.features.task.TasksViewModel
 class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener {
 
     private var binding: ItemTasksRecyclerViewBinding? = null
+
     // FIXME: create other viewmodel
     private val tasksViewModel: TasksViewModel by viewModels {
         TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)

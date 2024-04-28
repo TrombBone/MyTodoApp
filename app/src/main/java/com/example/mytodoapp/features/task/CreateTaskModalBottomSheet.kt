@@ -1,7 +1,6 @@
 package com.example.mytodoapp.features.task
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
 class CreateTaskModalBottomSheet() : BaseBottomSheet() {
 
     private var binding: BottomSheetCreateTaskBinding? = null
+
     // FIXME: create other viewmodel
     private val tasksViewModel: TasksViewModel by viewModels {
         TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)

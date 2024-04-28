@@ -1,7 +1,6 @@
 package com.example.mytodoapp.features.task
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +12,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseFragment
-import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.FragmentTasksBinding
-import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.task.viewpager.ItemTasksRecyclerPageFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,9 +21,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class TasksFragment : BaseFragment() {
 
     private var binding: FragmentTasksBinding? = null
-    val tasksViewModel: TasksViewModel by viewModels {
-        TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)
-    }
+//    val tasksViewModel: TasksViewModel by viewModels {
+//        TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
