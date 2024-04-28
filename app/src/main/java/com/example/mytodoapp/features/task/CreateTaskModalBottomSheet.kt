@@ -1,15 +1,23 @@
 package com.example.mytodoapp.features.task
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.abstracts.BaseBottomSheet
+import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
 
 class CreateTaskModalBottomSheet() : BaseBottomSheet() {
 
     private var binding: BottomSheetCreateTaskBinding? = null
+    // FIXME: create other viewmodel
+    private val tasksViewModel: TasksViewModel by viewModels {
+        TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,10 +44,10 @@ class CreateTaskModalBottomSheet() : BaseBottomSheet() {
                     title = addTaskTitleEditText.text.toString(),
                     details = addTaskDetailsEditText.text.toString()
                 )
-//                thread {
-//                    taskDAO.insert(task)
-//                }
-//                tasksFragment.fetchAllTasks()
+
+                // FIXME: create other viewmodel
+                tasksViewModel.insert(task)
+
                 this@CreateTaskModalBottomSheet.dismiss()
             }
         }

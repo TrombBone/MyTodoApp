@@ -1,6 +1,7 @@
 package com.example.mytodoapp.features.task
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,23 +10,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseFragment
-import com.example.mytodoapp.database.AppDatabase
-import com.example.mytodoapp.database.dao.TaskDAO
+import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.FragmentTasksBinding
+import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.task.viewpager.ItemTasksRecyclerPageFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TasksFragment : BaseFragment(), TaskAdapter.TaskStatusListener {
+class TasksFragment : BaseFragment() {
 
     private var binding: FragmentTasksBinding? = null
-    private lateinit var database: AppDatabase
-    private val taskDAO: TaskDAO by lazy { database.getTaskDAO() }
-
-    private val viewModel: TasksViewModel by viewModels()
+    val tasksViewModel: TasksViewModel by viewModels {
+        TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,19 +97,17 @@ class TasksFragment : BaseFragment(), TaskAdapter.TaskStatusListener {
         binding = null
     }
 
-    override fun onTaskUpdated(task: Task) {
-        TODO("Not yet implemented")
-    }
-
     private class TasksListViewPagerAdapter(activity: FragmentActivity) :
         FragmentStateAdapter(activity) {
 
-        override fun getItemCount() = 4 // FIXME: how can I count groups?
+        override fun getItemCount() = 4 // FIXME: use group viewmodel for count with DAO
 
         override fun createFragment(position: Int): Fragment {
             val fragment = ItemTasksRecyclerPageFragment()
-//            fragment.arguments = Bundle().apply { putInt("ARG_POSITION", position + 1) }
-            return ItemTasksRecyclerPageFragment()
+//            fragment.arguments = Bundle().apply {
+//                putInt("ARG_POSITION", position + 1)
+//            }
+            return fragment
         }
 
     }

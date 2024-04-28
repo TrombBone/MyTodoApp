@@ -1,9 +1,10 @@
-package com.example.mytodoapp.features.task
+package com.example.mytodoapp.database.entities
 
 import android.content.Context
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.mytodoapp.R
@@ -18,12 +19,21 @@ import java.time.ZonedDateTime
 
 @Parcelize
 @JsonClass(generateAdapter = true)
-@Entity
+@Entity(
+    tableName = "tasks",
+    foreignKeys = [
+        ForeignKey(
+            entity = TasksGroup::class,
+            parentColumns = arrayOf("taskGroupID"), childColumns = arrayOf("groupID"),
+            onDelete = ForeignKey.SET_DEFAULT
+        )]
+)
 data class Task @JvmOverloads constructor(
     @PrimaryKey
     @ColumnInfo(index = true)
     var taskID: String = "", //TODO: Get random ID like as UUID
-    var groupID: String = "", //TODO: Get ID count groups or just string group name
+    @ColumnInfo(index = true)
+    var groupID: String = "0", //TODO: Get ID count groups or just string group name
     var title: String? = null,
     var details: String? = null,
     var isStared: Boolean = false,

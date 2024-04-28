@@ -5,37 +5,44 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
-import com.example.mytodoapp.features.task.Task
+import com.example.mytodoapp.database.entities.Task
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(task: Task)
+    suspend fun insert(task: Task)
 
     @Delete
-    fun remove(task: Task)
+    suspend fun delete(task: Task)
 
     @Update
-    fun update(task: Task)
+    suspend fun update(task: Task)
 
-    @Query("SELECT taskID FROM task WHERE title = :task COLLATE NOCASE AND taskID != :taskId")
-    suspend fun checkTitleUniqueness(task: String?, taskId: String?): List<String>
+    @Query("SELECT taskID FROM tasks WHERE title = :taskTitle COLLATE NOCASE AND taskID != :taskId")
+    fun checkTitleUniqueness(taskTitle: String?, taskId: String?): List<String>
 
-    // TODO: fetchAll or fetchFinished ?
-    @Query("SELECT * FROM task WHERE isFinished = 0")
-    suspend fun fetch(): List<Task>
+    @Query("SELECT * FROM tasks WHERE groupID = :groupId")
+    fun fetchAllOnSelectedGroup(groupId: String): Flow<List<Task>>
 
-    @Query("SELECT COUNT(*) FROM task WHERE isFinished = 0")
-    suspend fun fetchCount(): Int
+    @Transaction
+    @Query("SELECT * FROM tasks LEFT JOIN groups ON tasks.groupID == groups.taskGroupID ORDER BY dueDate ASC")
+    fun fetchAllWithGroups(): Flow<List<Task>>
 
-    @Query("SELECT * FROM task WHERE groupID = :group")
-    suspend fun fetchSelectGroup(group: String): List<Task>
+    @Query("UPDATE tasks SET groupID = :groupId WHERE taskID = :taskId")
+    suspend fun setGroup(taskId: String, groupId: String)
 
-    @Query("UPDATE task SET groupID = :group WHERE taskID = :taskID")
-    suspend fun setGroup(taskID: String, group: String)
+    @Query("UPDATE tasks SET isFinished = :status WHERE taskID = :taskId")
+    suspend fun setFinished(taskId: String, status: Int)
 
-    @Query("UPDATE task SET isFinished = :status WHERE taskID = :taskID")
-    suspend fun setFinished(taskID: String, status: Int)
+    @Query("SELECT * FROM tasks ORDER BY taskID ASC")
+    fun fetchAllTasks(): Flow<List<Task>>
 
+    @Query("SELECT COUNT(*) FROM tasks")
+    fun fetchCountAllTasks(): Int
+
+    @Query("DELETE FROM tasks")
+    suspend fun deleteAll()
 }

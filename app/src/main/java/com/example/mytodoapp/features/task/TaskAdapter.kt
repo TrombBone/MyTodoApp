@@ -4,38 +4,56 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
 import com.example.mytodoapp.abstracts.BaseAdapter
 import com.example.mytodoapp.abstracts.BaseFragment
+import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.ItemTaskBinding
 import com.example.mytodoapp.extensions.setStrikeThroughEffect
 import com.google.android.material.checkbox.MaterialCheckBox
 
-class TaskAdapter<Task>(tasks: List<Task>, private val statusListener: TaskStatusListener) :
-    BaseAdapter<Task>(tasks) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
-        val binding = ItemTaskBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
-        return TaskViewHolder(binding.root, statusListener)
-    }
+class TaskAdapter(private val statusListener: TaskStatusListener) :
+    BaseAdapter<Task, TaskAdapter.TaskViewHolder>(TASK_COMPARATOR) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder =
+        TaskViewHolder.create(parent, statusListener)
 
     class TaskViewHolder(itemView: View, private val statusListener: TaskStatusListener) :
         BaseViewHolder(itemView) {
 
+        companion object {
+            fun create(parent: ViewGroup, statusListener: TaskStatusListener): TaskViewHolder {
+                val binding = ItemTaskBinding
+                    .inflate(LayoutInflater.from(parent.context), parent, false)
+                return TaskViewHolder(binding.root, statusListener)
+            }
+        }
+
         private val binding = ItemTaskBinding.bind(itemView)
 
-        override fun <T> onBind(data: T) {
-            if (data is Task) {
-                with(data as Task) {
+        override fun <T> onBind(item: T) {
+            if (item is Task) {
+                with(item as Task) {
                     binding.root.transitionName = BaseFragment.TRANSITION_ELEMENT_ROOT + taskID
 
                     binding.taskReadyCheckBox.isChecked = isFinished
                     binding.taskTitleTextview.text = title
-                    binding.taskDetailsTextview.text = details
+
+                    if (details.isNullOrEmpty()) {
+                        binding.taskDetailsTextview.isVisible = false
+                    } else {
+                        binding.taskDetailsTextview.isVisible = true
+                        binding.taskDetailsTextview.text = details
+                    }
+
                     binding.taskStaredCheckBox.isChecked = isStared
 
-                    if (hasDueDate())
+                    if (hasDueDate()) {
+                        binding.taskDatetimeChip.isVisible = true
                         binding.taskDatetimeChip.text = formatDueDate(binding.root.context)
-                    else binding.taskDatetimeChip.isVisible = false
+                    } else {
+                        binding.taskDatetimeChip.isVisible = false
+                    }
 
                     binding.taskReadyCheckBox.addOnCheckedStateChangedListener { _, state ->
                         when (state) {
@@ -46,6 +64,7 @@ class TaskAdapter<Task>(tasks: List<Task>, private val statusListener: TaskStatu
                                     taskDetailsTextview.setStrikeThroughEffect(true)
                                 }
                             }
+
                             MaterialCheckBox.STATE_UNCHECKED -> {
                                 isFinished = false
                                 with(binding) {
@@ -82,7 +101,21 @@ class TaskAdapter<Task>(tasks: List<Task>, private val statusListener: TaskStatu
         }
     }
 
+    companion object {
+        private val TASK_COMPARATOR = object : DiffUtil.ItemCallback<Task>() {
+            override fun areItemsTheSame(oldItem: Task, newItem: Task): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(oldItem: Task, newItem: Task): Boolean {
+                return oldItem.taskID == newItem.taskID
+            }
+        }
+    }
+
     interface TaskStatusListener {
+
+        fun onTaskCreate(task: Task)
 
         fun onTaskUpdated(task: Task)
 

@@ -3,10 +3,15 @@ package com.example.mytodoapp.utils
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.example.mytodoapp.database.converters.DateTimeConverter
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.time.LocalTime
 import java.time.ZonedDateTime
+import javax.inject.Inject
 
-class MySharedPreferenceManager(private val context: Context) {
+class MySharedPreferenceManager @Inject constructor(
+    @ApplicationContext
+    private val context: Context
+) {
 
     enum class Theme {
         SYSTEM, DARK, LIGHT;

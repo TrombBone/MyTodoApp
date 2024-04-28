@@ -1,18 +1,21 @@
 package com.example.mytodoapp.abstracts
 
 import android.view.View
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter<T>(private val dataSet: List<T>) :
-    RecyclerView.Adapter<BaseAdapter.BaseViewHolder>() {
+abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder?>(callback: DiffUtil.ItemCallback<T>) :
+    ListAdapter<T, VH>(callback) {
 
-    override fun getItemCount(): Int = dataSet.size
-
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) =
-        holder.onBind(dataSet[position])
+    override fun onBindViewHolder(holder: VH & Any, position: Int) {
+        val currentItem = getItem(position)
+        (holder as BaseViewHolder).onBind(currentItem)
+    }
 
     abstract class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        abstract fun <T> onBind(data: T)
+        abstract fun <T> onBind(item: T)
+
     }
 }
