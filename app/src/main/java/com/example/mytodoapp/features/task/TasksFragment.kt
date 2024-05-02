@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.databinding.FragmentTasksBinding
+import com.example.mytodoapp.features.task.bottomsheet.CreateTaskModalBottomSheet
 import com.example.mytodoapp.features.task.viewpager.ItemTasksRecyclerPageFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,12 +23,6 @@ class TasksFragment : BaseFragment() {
 //    val tasksViewModel: TasksViewModel by viewModels {
 //        TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)
 //    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

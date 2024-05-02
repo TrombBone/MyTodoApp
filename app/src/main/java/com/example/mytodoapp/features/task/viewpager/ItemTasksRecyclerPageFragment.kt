@@ -10,15 +10,15 @@ import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.task.TaskAdapter
-import com.example.mytodoapp.features.task.TasksViewModel
 
 class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener {
 
     private var binding: ItemTasksRecyclerViewBinding? = null
 
-    // FIXME: create other viewmodel
-    private val tasksViewModel: TasksViewModel by viewModels {
-        TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)
+    private val recyclerPageViewModel: RecyclerPageViewModel by viewModels {
+        RecyclerPageViewModel.RecyclerPageViewModelFactory(
+            (requireActivity().application as MyTodoApp).taskRepository
+        )
     }
 
     override fun onCreateView(
@@ -36,8 +36,7 @@ class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener
 //        arguments?.takeIf { it.containsKey("ARG_POSITION") }?.apply { }
         val taskAdapter = TaskAdapter(this)
         binding!!.itemTasksRecycler.adapter = taskAdapter
-        // FIXME: create other viewmodel
-        tasksViewModel.tasks.observe(requireActivity()) { tasks ->
+        recyclerPageViewModel.tasks.observe(requireActivity()) { tasks ->
             tasks.let { taskAdapter.submitList(it) }
         }
     }
@@ -48,11 +47,11 @@ class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener
     }
 
     override fun onTaskCreate(task: Task) {
-        tasksViewModel.insert(task)
+        recyclerPageViewModel.insert(task)
     }
 
     override fun onTaskUpdated(task: Task) {
-        tasksViewModel.update(task)
+        recyclerPageViewModel.update(task)
     }
 
 }

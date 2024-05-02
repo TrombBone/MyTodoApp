@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task
+package com.example.mytodoapp.features.task.bottomsheet
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,9 +14,10 @@ class CreateTaskModalBottomSheet() : BaseBottomSheet() {
 
     private var binding: BottomSheetCreateTaskBinding? = null
 
-    // FIXME: create other viewmodel
-    private val tasksViewModel: TasksViewModel by viewModels {
-        TasksViewModel.TasksViewModelFactory((requireActivity().application as MyTodoApp).taskRepository)
+    private val createTaskBottomSheetViewModel: CreateTaskBottomSheetViewModel by viewModels {
+        CreateTaskBottomSheetViewModel.CreateTaskBottomSheetViewModelFactory(
+            (requireActivity().application as MyTodoApp).taskRepository
+        )
     }
 
     override fun onCreateView(
@@ -45,8 +46,7 @@ class CreateTaskModalBottomSheet() : BaseBottomSheet() {
                     details = addTaskDetailsEditText.text.toString()
                 )
 
-                // FIXME: create other viewmodel
-                tasksViewModel.insert(task)
+                createTaskBottomSheetViewModel.insert(task)
 
                 this@CreateTaskModalBottomSheet.dismiss()
             }
