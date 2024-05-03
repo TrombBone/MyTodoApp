@@ -19,16 +19,14 @@ class TaskRepository @Inject constructor(
 //    private val notificationManager: NotificationManager
 ) {
 
-    val allTasksJoinGroups: Flow<List<Task>> = tasks.fetchAllWithGroups()
-
     val allTasks: Flow<List<Task>> = tasks.fetchAllTasks()
 
-    fun fetchSelectedGroup(group: String): Flow<List<Task>> = tasks.fetchAllOnSelectedGroup(group)
+    val allTasksCount: Flow<Int> = tasks.countAllTasks()
 
-    suspend fun checkTitleUniqueness(title: String?, id: String?): List<String> = tasks.checkTitleUniqueness(title, id)
+    fun fetchTasksSelectedGroup(groupID: String): Flow<List<Task>> = tasks.fetchTasksSelectedGroup(groupID)
 
-    @WorkerThread
-    suspend fun fetchCountAllTasks(): Int = tasks.fetchCountAllTasks()
+    // FIXME: Do I really need it?
+    fun checkTitleUniqueness(title: String?, id: String?): Flow<List<String>> = tasks.checkTitleUniqueness(title, id)
 
     // TODO in all functions:
     // TODO: use preference manager like as shared preferences

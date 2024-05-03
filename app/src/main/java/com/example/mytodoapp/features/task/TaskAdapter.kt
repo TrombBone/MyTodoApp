@@ -1,5 +1,6 @@
 package com.example.mytodoapp.features.task
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,12 +39,14 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
 
                     binding.taskReadyCheckBox.isChecked = isFinished
                     binding.taskTitleTextview.text = title
+                    binding.taskTitleTextview.setStrikeThroughEffect(isFinished)
 
                     if (details.isNullOrEmpty()) {
                         binding.taskDetailsTextview.isVisible = false
                     } else {
                         binding.taskDetailsTextview.isVisible = true
                         binding.taskDetailsTextview.text = details
+                        binding.taskDetailsTextview.setStrikeThroughEffect(isFinished)
                     }
 
                     binding.taskStaredCheckBox.isChecked = isStared
@@ -55,46 +58,63 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
                         binding.taskDatetimeChip.isVisible = false
                     }
 
+                    binding.taskReadyCheckBox.setOnClickListener {
+                        with(it as MaterialCheckBox) {
+                            isFinished = isChecked
+                            binding.taskTitleTextview.setStrikeThroughEffect(isChecked)
+                            binding.taskDetailsTextview.setStrikeThroughEffect(isChecked)
+                        }
+                        // FIXME: screen update lag...
+                        statusListener.onTaskUpdated(item)
+                    }
+
+                    /*
+                    // not working, but it should...
                     binding.taskReadyCheckBox.addOnCheckedStateChangedListener { _, state ->
                         when (state) {
                             MaterialCheckBox.STATE_CHECKED -> {
                                 isFinished = true
-                                with(binding) {
-                                    taskTitleTextview.setStrikeThroughEffect(true)
-                                    taskDetailsTextview.setStrikeThroughEffect(true)
-                                }
+                                binding.taskTitleTextview.setStrikeThroughEffect(true)
+                                binding.taskDetailsTextview.setStrikeThroughEffect(true)
                             }
-
-                            MaterialCheckBox.STATE_UNCHECKED -> {
-                                isFinished = false
-                                with(binding) {
-                                    taskTitleTextview.setStrikeThroughEffect(false)
-                                    taskDetailsTextview.setStrikeThroughEffect(false)
-                                }
-                            }
-                            //MaterialCheckBox.STATE_INDETERMINATE
+                            // STATE_INDETERMINATE || STATE_UNCHECKED
                             else -> {
                                 isFinished = false
-                                with(binding) {
-                                    taskTitleTextview.setStrikeThroughEffect(false)
-                                    taskDetailsTextview.setStrikeThroughEffect(false)
-                                }
+                                binding.taskTitleTextview.setStrikeThroughEffect(false)
+                                binding.taskDetailsTextview.setStrikeThroughEffect(false)
                             }
                         }
-                        binding.taskReadyCheckBox.isChecked = isFinished // FIXME: really needs it?
+                        statusListener.onTaskUpdated(this)
+                    }
+                    */
+
+                    binding.taskStaredCheckBox.setOnClickListener {
+                        with(it as MaterialCheckBox) {
+                            isStared = isChecked
+                        }
+                        // FIXME: screen update lag...
                         statusListener.onTaskUpdated(this)
                     }
 
-                    binding.taskStaredCheckBox.addOnCheckedStateChangedListener { _, state ->
-                        isStared = when (state) {
-                            MaterialCheckBox.STATE_CHECKED -> true
-                            MaterialCheckBox.STATE_UNCHECKED -> false
-                            //MaterialCheckBox.STATE_INDETERMINATE
-                            else -> false
+                    // not working, but it should...
+                    /*
+                    binding.taskStaredCheckBox.setOnCheckedChangeListener { checkBox, isChecked ->
+                        if (checkBox == binding.taskStaredCheckBox) {
+                            isStared = isChecked
+                            statusListener.onTaskUpdated(this)
                         }
-                        binding.taskStaredCheckBox.isChecked = isStared // FIXME: really needs it?
-                        statusListener.onTaskUpdated(this)
                     }
+                    */
+                    /*
+                    binding.taskStaredCheckBox.addOnCheckedStateChangedListener { _, state ->
+                        val newTask = when (state) {
+                            MaterialCheckBox.STATE_CHECKED -> copy(isStared = true)
+                            //MaterialCheckBox.STATE_INDETERMINATE
+                            else -> copy(isStared = false)
+                        }
+                        statusListener.onTaskUpdated(newTask)
+                    }
+                    */
 
                 }
             }
@@ -114,8 +134,6 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
     }
 
     interface TaskStatusListener {
-
-        fun onTaskCreate(task: Task)
 
         fun onTaskUpdated(task: Task)
 

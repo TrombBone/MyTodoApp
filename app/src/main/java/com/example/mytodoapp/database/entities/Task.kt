@@ -16,6 +16,7 @@ import com.example.mytodoapp.extensions.isYesterday
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
+import java.util.UUID
 
 @Parcelize
 @JsonClass(generateAdapter = true)
@@ -31,9 +32,9 @@ import java.time.ZonedDateTime
 data class Task @JvmOverloads constructor(
     @PrimaryKey
     @ColumnInfo(index = true)
-    var taskID: String = "", //TODO: Get random ID like as UUID
+    var taskID: String = UUID.randomUUID().toString(),
     @ColumnInfo(index = true)
-    var groupID: String = "0", //TODO: Get ID count groups or just string group name
+    var groupID: String = "1",
     var title: String? = null,
     var details: String? = null,
     var isStared: Boolean = false,
@@ -41,7 +42,7 @@ data class Task @JvmOverloads constructor(
     var dueDate: ZonedDateTime? = null,
     var isFinished: Boolean = false,
     @TypeConverters(DateTimeConverter::class)
-    var dateAdded: ZonedDateTime? = ZonedDateTime.now() //TODO: Do I really need it?
+    var dateAdded: ZonedDateTime? = ZonedDateTime.now() // need for sort by last added
 ) : Parcelable {
 
     fun hasDueDate(): Boolean = dueDate != null

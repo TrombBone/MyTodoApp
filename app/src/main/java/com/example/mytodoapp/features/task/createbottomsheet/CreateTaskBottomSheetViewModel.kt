@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.bottomsheet
+package com.example.mytodoapp.features.task.createbottomsheet
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -21,14 +21,6 @@ class CreateTaskBottomSheetViewModel @Inject constructor(
 
     fun insert(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
         repository.insert(task)
-    }
-
-    fun delete(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
-        repository.delete(task)
-    }
-
-    fun update(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
-        repository.update(task)
     }
 
     /*

@@ -2,6 +2,7 @@ package com.example.mytodoapp
 
 import android.app.Application
 import com.example.mytodoapp.database.AppDatabase
+import com.example.mytodoapp.database.repository.GroupRepository
 import com.example.mytodoapp.database.repository.TaskRepository
 import com.example.mytodoapp.utils.MySharedPreferenceManager
 import dagger.hilt.android.HiltAndroidApp
@@ -20,5 +21,6 @@ class MyTodoApp : Application() {
     // rather than when the application starts
      val database by lazy { AppDatabase.getInstance(this, applicationScope) }
     val taskRepository by lazy { TaskRepository(this, database.getTaskDAO(), preferenceManager) }
+    val groupRepository by lazy { GroupRepository(this, database.getGroupDAO(), preferenceManager) }
 
 }

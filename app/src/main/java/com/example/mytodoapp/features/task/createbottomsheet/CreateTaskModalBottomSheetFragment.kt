@@ -1,16 +1,21 @@
-package com.example.mytodoapp.features.task.bottomsheet
+package com.example.mytodoapp.features.task.createbottomsheet
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.abstracts.BaseBottomSheet
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
+import com.google.android.material.checkbox.MaterialCheckBox
 
-class CreateTaskModalBottomSheet() : BaseBottomSheet() {
+class CreateTaskModalBottomSheet : BaseBottomSheet() {
 
     private var binding: BottomSheetCreateTaskBinding? = null
 
@@ -40,10 +45,24 @@ class CreateTaskModalBottomSheet() : BaseBottomSheet() {
                     addTaskDetailsEditText.visibility = View.VISIBLE
             }
 
+            setDatetimeButton.setOnClickListener {
+                // TODO
+            }
+
+            saveTaskButton.isEnabled = false
+            addTaskTitleEditText.doOnTextChanged { text, _, _, _ ->
+                saveTaskButton.isEnabled = text.toString().trim().isNotEmpty()
+            }
+
             saveTaskButton.setOnClickListener {
                 val task = Task(
                     title = addTaskTitleEditText.text.toString(),
-                    details = addTaskDetailsEditText.text.toString()
+                    details = addTaskDetailsEditText.text.toString(),
+                    //TODO
+//                    groupID =
+                    isStared = setTaskStaredCheckBox.isChecked,
+                    //TODO
+//                    dueDate =
                 )
 
                 createTaskBottomSheetViewModel.insert(task)

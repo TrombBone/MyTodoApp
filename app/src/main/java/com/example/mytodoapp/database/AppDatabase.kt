@@ -66,36 +66,32 @@ abstract class AppDatabase : RoomDatabase() {
          */
         suspend fun populateDatabase(taskDAO: TaskDAO, groupDAO: GroupDAO) {
             // TODO: get group name from res
-            groupDAO.insert(TasksGroup("0", "My Tasks"))
+            groupDAO.insert(TasksGroup("1", "My Tasks"))
 
 
             // Add temp samples
 
-            //taskDAO.deleteAll()
+            taskDAO.deleteAll()
 
             var task = Task(
-                "0",
                 title = "This is empty task example!"
             )
             taskDAO.insert(task)
             task = Task(
-                "1",
                 title = "This is task with details example!",
                 details = "Example details"
             )
             taskDAO.insert(task)
             task = Task(
-                "3",
                 title = "This is ready task example!",
                 isFinished = true
             )
             taskDAO.insert(task)
-            task = Task(
-                "4",
-                title = "This is stared task example!",
-                isStared = true
-            )
-            taskDAO.insert(task)
+//            task = Task(
+//                title = "This is stared task example!",
+//                isStared = true
+//            )
+//            taskDAO.insert(task)
         }
     }
 

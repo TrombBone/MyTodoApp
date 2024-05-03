@@ -5,26 +5,29 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.mytodoapp.database.entities.TasksGroup
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GroupDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(group: TasksGroup)
+    suspend fun insert(group: TasksGroup)
 
     @Delete
-    fun remove(group: TasksGroup)
+    suspend fun delete(group: TasksGroup)
 
     @Update
-    fun update(group: TasksGroup)
+    suspend fun update(group: TasksGroup)
 
-    @Query("SELECT taskGroupID FROM groups WHERE groupTitle = :groupTitle COLLATE NOCASE AND taskGroupID != :groupId")
-    suspend fun checkTitleUniqueness(groupTitle: String?, groupId: String?): List<String>
-
-    @Query("SELECT * FROM groups")
-    suspend fun fetch(): List<TasksGroup>
+    @Query("SELECT * FROM groups ORDER BY taskGroupID")
+    fun fetchAllGroups(): Flow<List<TasksGroup>>
 
     @Query("SELECT COUNT(*) FROM groups")
-    suspend fun fetchCount(): Int
+    fun countAllGroups(): Flow<Int>
+
+    // FIXME: Do I really need it?
+    @Query("SELECT taskGroupID FROM groups WHERE groupTitle = :groupTitle COLLATE NOCASE AND taskGroupID != :groupId")
+    fun checkTitleUniqueness(groupTitle: String?, groupId: String?): Flow<List<String>>
 }
