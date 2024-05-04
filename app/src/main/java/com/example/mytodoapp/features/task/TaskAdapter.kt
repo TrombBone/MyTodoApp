@@ -1,6 +1,5 @@
 package com.example.mytodoapp.features.task
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,12 +11,18 @@ import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.ItemTaskBinding
 import com.example.mytodoapp.extensions.setStrikeThroughEffect
 import com.google.android.material.checkbox.MaterialCheckBox
+import java.util.UUID
 
 class TaskAdapter(private val statusListener: TaskStatusListener) :
     BaseAdapter<Task, TaskAdapter.TaskViewHolder>(TASK_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder =
         TaskViewHolder.create(parent, statusListener)
+
+    override fun getItemId(position: Int): Long {
+        val uuid = UUID.fromString(getItem(position).taskID)
+        return uuid.mostSignificantBits
+    }
 
     class TaskViewHolder(itemView: View, private val statusListener: TaskStatusListener) :
         BaseViewHolder(itemView) {
@@ -64,8 +69,7 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
                             binding.taskTitleTextview.setStrikeThroughEffect(isChecked)
                             binding.taskDetailsTextview.setStrikeThroughEffect(isChecked)
                         }
-                        // FIXME: screen update lag...
-                        statusListener.onTaskUpdated(item)
+                        statusListener.onTaskUpdated(this)
                     }
 
                     /*
@@ -92,7 +96,6 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
                         with(it as MaterialCheckBox) {
                             isStared = isChecked
                         }
-                        // FIXME: screen update lag...
                         statusListener.onTaskUpdated(this)
                     }
 
@@ -134,9 +137,7 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
     }
 
     interface TaskStatusListener {
-
         fun onTaskUpdated(task: Task)
-
     }
 
 }

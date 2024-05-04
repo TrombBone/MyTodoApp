@@ -1,13 +1,11 @@
 package com.example.mytodoapp.features.task.viewpager
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
@@ -45,19 +43,16 @@ class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener
                 currentGroupID = getInt(MySharedPreferenceManager.PREFERENCE_VIEWPAGER_ARG_POSITION)
             }
 
-        Log.d("MYTAG", "I'm in onViewCreated() in ItemTasksRecyclerPageFragment #$currentGroupID")
-
+        taskAdapter.setHasStableIds(true)
         binding!!.itemTasksRecycler.adapter = taskAdapter
+
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d("MYTAG", "I'm in onStart() in ItemTasksRecyclerPageFragment #$currentGroupID")
 
         recyclerPageViewModel.tasks.observe(viewLifecycleOwner) { tasks ->
-            Log.d("MYTAG", "I'm in recyclerPageViewModel.tasks.observe #$currentGroupID")
             tasks?.let { list ->
-                Log.d("MYTAG", "tasks: $list")
                 taskAdapter.submitList(
                     when (currentGroupID) {
                         0 -> list.filter { it.isStared }
@@ -67,12 +62,6 @@ class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener
                 )
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.d("MYTAG", "I'm in onResume() in ItemTasksRecyclerPageFragment #$currentGroupID")
-
     }
 
     override fun onDestroy() {

@@ -1,7 +1,6 @@
 package com.example.mytodoapp.features.task
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,7 +36,6 @@ class TasksFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        Log.d("MYTAG", "I'm in onCreateView()")
         val fragmentBinding = FragmentTasksBinding
             .inflate(inflater, container, false)
         binding = fragmentBinding
@@ -46,7 +44,6 @@ class TasksFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        Log.d("MYTAG", "I'm in onViewCreate()")
 //        binding!!.addTaskFloatingActionButton.transitionName = TRANSITION_ELEMENT_ROOT
 
         binding?.apply {
@@ -77,7 +74,6 @@ class TasksFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-//        Log.d("MYTAG", "I'm in onResume() in TaskFragment")
         binding!!.addTaskFloatingActionButton.setOnClickListener { showCreateTaskBottomSheet() }
 //        binding!!.tasksListContainerViewPager.currentItem = 1
 
