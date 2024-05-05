@@ -2,7 +2,6 @@ package com.example.mytodoapp.features.task.viewpager
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.database.entities.Task
@@ -21,33 +20,11 @@ class RecyclerPageViewModel @Inject constructor(
 
     val tasks: LiveData<List<Task>> = repository.allTasks.asLiveData()
 
-    fun fetchTasksSelectedGroup(groupID: String) = repository.fetchTasksSelectedGroup(groupID).asLiveData()
+    fun fetchTasksSelectedGroup(groupID: String) =
+        repository.fetchTasksSelectedGroup(groupID).asLiveData()
 
     fun update(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
         repository.update(task)
     }
 
-    /*
-    // another way to use factory
-    companion object {
-        fun provideFactory(fragment: Fragment): RecyclerPageViewModel {
-            val factory =
-                RecyclerPageViewModelFactory((fragment.requireActivity().application as MyTodoApp).taskRepository)
-            return ViewModelProvider(fragment, factory)[RecyclerPageViewModel::class.java]
-        }
-    }
-    */
-
-    class RecyclerPageViewModelFactory(
-        private val repository: TaskRepository,
-//    private val preferenceManager: MySharedPreferenceManager
-    ) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(RecyclerPageViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return RecyclerPageViewModel(repository) as T
-            }
-            throw IllegalArgumentException("Unknown View Model Class")
-        }
-    }
 }

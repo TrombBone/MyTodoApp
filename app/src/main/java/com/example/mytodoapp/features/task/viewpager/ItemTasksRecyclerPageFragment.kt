@@ -6,21 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.task.TaskAdapter
 import com.example.mytodoapp.utils.MySharedPreferenceManager
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener {
 
     private var binding: ItemTasksRecyclerViewBinding? = null
 
-    private val recyclerPageViewModel: RecyclerPageViewModel by viewModels {
-        RecyclerPageViewModel.RecyclerPageViewModelFactory(
-            (requireActivity().application as MyTodoApp).taskRepository
-        )
-    }
+    private val recyclerPageViewModel: RecyclerPageViewModel by viewModels()
 
     private val taskAdapter = TaskAdapter(this)
 

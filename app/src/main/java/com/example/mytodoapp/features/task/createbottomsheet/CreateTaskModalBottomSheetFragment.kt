@@ -1,29 +1,22 @@
 package com.example.mytodoapp.features.task.createbottomsheet
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
-import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.abstracts.BaseBottomSheet
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
-import com.google.android.material.checkbox.MaterialCheckBox
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class CreateTaskModalBottomSheet : BaseBottomSheet() {
 
     private var binding: BottomSheetCreateTaskBinding? = null
 
-    private val createTaskBottomSheetViewModel: CreateTaskBottomSheetViewModel by viewModels {
-        CreateTaskBottomSheetViewModel.CreateTaskBottomSheetViewModelFactory(
-            (requireActivity().application as MyTodoApp).taskRepository
-        )
-    }
+    private val createTaskBottomSheetViewModel: CreateTaskBottomSheetViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

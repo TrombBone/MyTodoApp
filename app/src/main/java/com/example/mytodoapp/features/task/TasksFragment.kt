@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.mytodoapp.MyTodoApp
 import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.database.entities.TasksGroup
@@ -26,9 +25,7 @@ class TasksFragment : BaseFragment() {
 
     private var binding: FragmentTasksBinding? = null
 
-    private val groupsViewModel: GroupsViewModel by viewModels {
-        GroupsViewModel.GroupsViewModelFactory((requireActivity().application as MyTodoApp).groupRepository)
-    }
+    private val groupsViewModel: GroupsViewModel by viewModels()
 
     private var groups: List<TasksGroup> = listOf()
 
