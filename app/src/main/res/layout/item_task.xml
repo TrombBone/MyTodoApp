@@ -24,17 +24,19 @@
         android:id="@+id/task_title_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/task_stared_checkBox"
         app:layout_constraintStart_toEndOf="@+id/task_ready_checkBox"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingTop="10dp"
-        android:textSize="18sp"
         tools:text="Task 1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/task_details_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/task_stared_checkBox"
         app:layout_constraintStart_toEndOf="@+id/task_ready_checkBox"
         app:layout_constraintTop_toBottomOf="@id/task_title_textview"
@@ -45,6 +47,7 @@
         style="@style/Widget.Material3.Chip.Suggestion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingTop="10dp"
         app:layout_constraintStart_toEndOf="@+id/task_ready_checkBox"
         app:layout_constraintTop_toBottomOf="@+id/task_details_textview"
         tools:text="today at 18:00" />

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.example.mytodoapp.abstracts.BaseBottomSheet
@@ -14,7 +15,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class CreateTaskModalBottomSheet : BaseBottomSheet() {
 
-    private var binding: BottomSheetCreateTaskBinding? = null
+    private var _binding: BottomSheetCreateTaskBinding? = null
+    private val binding get() = _binding!!
 
     private val createTaskBottomSheetViewModel: CreateTaskBottomSheetViewModel by viewModels()
 
@@ -23,19 +25,14 @@ class CreateTaskModalBottomSheet : BaseBottomSheet() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val bottomSheetBinding = BottomSheetCreateTaskBinding
-            .inflate(inflater, container, false)
-        binding = bottomSheetBinding
-        return bottomSheetBinding.root
+        _binding = BottomSheetCreateTaskBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        with(binding!!) {
+        with(binding) {
             showDetailsFieldButton.setOnClickListener {
-                if (addTaskDetailsEditText.visibility == View.VISIBLE)
-                    addTaskDetailsEditText.visibility = View.GONE
-                else
-                    addTaskDetailsEditText.visibility = View.VISIBLE
+                addTaskDetailsEditText.isVisible = !addTaskDetailsEditText.isVisible
             }
 
             setDatetimeButton.setOnClickListener {
@@ -50,7 +47,8 @@ class CreateTaskModalBottomSheet : BaseBottomSheet() {
             saveTaskButton.setOnClickListener {
                 val task = Task(
                     title = addTaskTitleEditText.text.toString(),
-                    details = addTaskDetailsEditText.text.toString(),
+                    details = if (addTaskDetailsEditText.text.isNullOrEmpty()) null
+                    else addTaskDetailsEditText.text.toString(),
                     //TODO
 //                    groupID =
                     isStared = setTaskStaredCheckBox.isChecked,
@@ -68,7 +66,7 @@ class CreateTaskModalBottomSheet : BaseBottomSheet() {
 
     override fun onDestroy() {
         super.onDestroy()
-        binding = null
+        _binding = null
     }
 
     companion object {

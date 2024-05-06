@@ -45,6 +45,8 @@ data class Task @JvmOverloads constructor(
     var dateAdded: ZonedDateTime? = ZonedDateTime.now() // need for sort by last added
 ) : Parcelable {
 
+    fun hasDetails(): Boolean = details != null
+
     fun hasDueDate(): Boolean = dueDate != null
 
     fun isDueDateInFuture(): Boolean = dueDate?.isAfterNow() == true

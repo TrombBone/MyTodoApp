@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.task.TaskAdapter
@@ -13,9 +13,10 @@ import com.example.mytodoapp.utils.MySharedPreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener {
+class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusListener {
 
-    private var binding: ItemTasksRecyclerViewBinding? = null
+    private var _binding: ItemTasksRecyclerViewBinding? = null
+    private val binding get() = _binding!!
 
     private val recyclerPageViewModel: RecyclerPageViewModel by viewModels()
 
@@ -28,20 +29,18 @@ class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val fragmentBinding = ItemTasksRecyclerViewBinding
-            .inflate(inflater, container, false)
-        binding = fragmentBinding
-        return fragmentBinding.root
+        _binding = ItemTasksRecyclerViewBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.takeIf { it.containsKey(MySharedPreferenceManager.PREFERENCE_VIEWPAGER_ARG_POSITION) }
+        arguments?.takeIf { it.containsKey(ARG_KEY_POSITION) }
             ?.apply {
-                currentGroupID = getInt(MySharedPreferenceManager.PREFERENCE_VIEWPAGER_ARG_POSITION)
+                currentGroupID = getInt(ARG_KEY_POSITION)
             }
 
         taskAdapter.setHasStableIds(true)
-        binding!!.itemTasksRecycler.adapter = taskAdapter
+        binding.itemTasksRecycler.adapter = taskAdapter
 
     }
 
@@ -63,11 +62,14 @@ class ItemTasksRecyclerPageFragment : Fragment(), TaskAdapter.TaskStatusListener
 
     override fun onDestroy() {
         super.onDestroy()
-        binding = null
+        _binding = null
     }
 
     override fun onTaskUpdated(task: Task) {
         recyclerPageViewModel.update(task)
     }
 
+    companion object {
+        val ARG_KEY_POSITION: String = "${this::class.java.name}_ARG_KEY_POSITION"
+    }
 }

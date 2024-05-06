@@ -166,7 +166,5 @@ class MySharedPreferenceManager @Inject constructor(
         // Preferences that are not visible in anywhere and are only
         // used for remembering user choices in the UI
         const val PREFERENCE_NO_CONFIRM_IMPORT = "KEY_NO_CONFIRM_IMPORT"
-
-        const val PREFERENCE_VIEWPAGER_ARG_POSITION = "KEY_ARG_POSITION"
     }
 }

@@ -23,7 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class TasksFragment : BaseFragment() {
 
-    private var binding: FragmentTasksBinding? = null
+    private var _binding: FragmentTasksBinding? = null
+    private val binding get() = _binding!!
 
     private val groupsViewModel: GroupsViewModel by viewModels()
 
@@ -33,17 +34,15 @@ class TasksFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val fragmentBinding = FragmentTasksBinding
-            .inflate(inflater, container, false)
-        binding = fragmentBinding
-        return fragmentBinding.root
+        _binding = FragmentTasksBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        binding!!.addTaskFloatingActionButton.transitionName = TRANSITION_ELEMENT_ROOT
+//        binding.addTaskFloatingActionButton.transitionName = TRANSITION_ELEMENT_ROOT
 
-        binding?.apply {
+        binding.apply {
             groupsViewModel.allGroups.observe(viewLifecycleOwner) { tasksGroups ->
                 tasksGroups?.let { groups = it }
 
@@ -61,7 +60,7 @@ class TasksFragment : BaseFragment() {
 
                 // FIXME: how will it work after adding a new group?
                 if (groups.isNotEmpty())
-                    binding!!.tasksListContainerViewPager.currentItem = 1
+                    binding.tasksListContainerViewPager.currentItem = 1
             }
         }
 
@@ -71,10 +70,10 @@ class TasksFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        binding!!.addTaskFloatingActionButton.setOnClickListener { showCreateTaskBottomSheet() }
-//        binding!!.tasksListContainerViewPager.currentItem = 1
+        binding.addTaskFloatingActionButton.setOnClickListener { showCreateTaskBottomSheet() }
+//        binding.tasksListContainerViewPager.currentItem = 1
 
-        binding!!.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
 //                if (tab != null)
@@ -101,7 +100,7 @@ class TasksFragment : BaseFragment() {
      */
     override fun onDestroy() {
         super.onDestroy()
-        binding = null
+        _binding = null
     }
 
     private inner class TasksListViewPagerAdapter(activity: FragmentActivity) :
@@ -112,7 +111,7 @@ class TasksFragment : BaseFragment() {
         override fun createFragment(position: Int): Fragment {
             val fragment = ItemTasksRecyclerPageFragment()
             fragment.arguments = Bundle().apply {
-                putInt(MySharedPreferenceManager.PREFERENCE_VIEWPAGER_ARG_POSITION, position)
+                putInt(ItemTasksRecyclerPageFragment.ARG_KEY_POSITION, position)
             }
             return fragment
         }

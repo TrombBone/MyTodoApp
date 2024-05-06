@@ -43,18 +43,17 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
                     binding.root.transitionName = BaseFragment.TRANSITION_ELEMENT_ROOT + taskID
 
                     binding.taskReadyCheckBox.isChecked = isFinished
+
                     binding.taskTitleTextview.text = title
                     binding.taskTitleTextview.setStrikeThroughEffect(isFinished)
 
-                    if (details.isNullOrEmpty()) {
-                        binding.taskDetailsTextview.isVisible = false
-                    } else {
+                    if (hasDetails()) {
                         binding.taskDetailsTextview.isVisible = true
                         binding.taskDetailsTextview.text = details
                         binding.taskDetailsTextview.setStrikeThroughEffect(isFinished)
+                    } else {
+                        binding.taskDetailsTextview.isVisible = false
                     }
-
-                    binding.taskStaredCheckBox.isChecked = isStared
 
                     if (hasDueDate()) {
                         binding.taskDatetimeChip.isVisible = true
@@ -63,11 +62,14 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
                         binding.taskDatetimeChip.isVisible = false
                     }
 
+                    binding.taskStaredCheckBox.isChecked = isStared
+
                     binding.taskReadyCheckBox.setOnClickListener {
                         with(it as MaterialCheckBox) {
                             isFinished = isChecked
                             binding.taskTitleTextview.setStrikeThroughEffect(isChecked)
-                            binding.taskDetailsTextview.setStrikeThroughEffect(isChecked)
+                            if (hasDetails())
+                                binding.taskDetailsTextview.setStrikeThroughEffect(isChecked)
                         }
                         statusListener.onTaskUpdated(this)
                     }
@@ -122,6 +124,7 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
                 }
             }
         }
+
     }
 
     companion object {
