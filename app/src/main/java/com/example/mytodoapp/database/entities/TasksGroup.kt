@@ -15,6 +15,6 @@ import kotlinx.parcelize.Parcelize
 data class TasksGroup @JvmOverloads constructor(
     @PrimaryKey
     @ColumnInfo(index = true)
-    var taskGroupID: String = "", //TODO: Get random ID like as UUID, counter
+    var taskGroupID: String = "2",
     var groupTitle: String? = ""
 ) : Parcelable

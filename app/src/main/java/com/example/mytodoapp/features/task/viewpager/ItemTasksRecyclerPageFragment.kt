@@ -9,7 +9,6 @@ import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.task.TaskAdapter
-import com.example.mytodoapp.utils.MySharedPreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +40,6 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
 
         taskAdapter.setHasStableIds(true)
         binding.itemTasksRecycler.adapter = taskAdapter
-
     }
 
     override fun onStart() {
@@ -60,9 +58,9 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         _binding = null
+        super.onDestroyView()
     }
 
     override fun onTaskUpdated(task: Task) {

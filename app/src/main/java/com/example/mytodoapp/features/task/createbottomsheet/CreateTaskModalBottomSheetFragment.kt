@@ -13,7 +13,7 @@ import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreateTaskModalBottomSheet : BaseBottomSheet() {
+class CreateTaskModalBottomSheetFragment : BaseBottomSheet() {
 
     private var _binding: BottomSheetCreateTaskBinding? = null
     private val binding get() = _binding!!
@@ -30,7 +30,10 @@ class CreateTaskModalBottomSheet : BaseBottomSheet() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         with(binding) {
+            addTaskTitleEditText.requestFocus()
+
             showDetailsFieldButton.setOnClickListener {
                 addTaskDetailsEditText.isVisible = !addTaskDetailsEditText.isVisible
             }
@@ -58,15 +61,14 @@ class CreateTaskModalBottomSheet : BaseBottomSheet() {
 
                 createTaskBottomSheetViewModel.insert(task)
 
-                this@CreateTaskModalBottomSheet.dismiss()
+                this@CreateTaskModalBottomSheetFragment.dismiss()
             }
         }
-        super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         _binding = null
+        super.onDestroyView()
     }
 
     companion object {
