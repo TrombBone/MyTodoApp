@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/stared"
         android:icon="@drawable/ic_star_outline_24"
         android:title=""
-        app:showAsAction="ifRoom"
-        tools:title="Stared" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/delete"
-        android:title=""
-        app:showAsAction="never"
-        tools:title="Delete" />
+        android:title="Delete"
+        app:showAsAction="never" />
 
 </menu>

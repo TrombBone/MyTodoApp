@@ -1,7 +1,10 @@
 package com.example.mytodoapp.database.entities
 
 import android.content.Context
+import android.os.Build
+import android.os.Bundle
 import android.os.Parcelable
+import androidx.core.os.bundleOf
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -79,5 +82,61 @@ data class Task @JvmOverloads constructor(
         else dueDate?.format(DateTimeConverter.getDateTimeFormatter(context))
     }
 
-    //TODO: mb need many functions for JSON and Bundle
+    companion object {
+        const val EXTRA_TASK = "EXTRA_TASK"
+        private const val EXTRA_ID = "EXTRA_ID"
+        private const val EXTRA_GROUP_ID = "EXTRA_GROUP_ID"
+        private const val EXTRA_TITLE = "EXTRA_TITLE"
+        private const val EXTRA_DETAILS = "EXTRA_DETAILS"
+        private const val EXTRA_IS_STARED = "EXTRA_IS_STARED"
+        private const val EXTRA_DUE_DATE = "EXTRA_DUE_DATE"
+        private const val EXTRA_IS_FINISHED = "EXTRA_IS_FINISHED"
+        private const val EXTRA_DATE_ADDED = "EXTRA_ADDED_DATE"
+
+        fun toBundle(task: Task): Bundle {
+            return bundleOf(
+                EXTRA_ID to task.taskID,
+                EXTRA_GROUP_ID to task.groupID,
+                EXTRA_TITLE to task.title,
+                EXTRA_DETAILS to task.details,
+                EXTRA_IS_STARED to task.isStared,
+                EXTRA_DUE_DATE to task.dueDate,
+                EXTRA_IS_FINISHED to task.isFinished,
+                EXTRA_DATE_ADDED to task.dateAdded
+            )
+        }
+
+        fun fromBundle(bundle: Bundle): Task? {
+            if (!bundle.containsKey(EXTRA_ID) || !bundle.containsKey(EXTRA_GROUP_ID)) return null
+
+            with(bundle) {
+                return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    Task(
+                        taskID = getString(EXTRA_ID)!!,
+                        groupID = getString(EXTRA_GROUP_ID)!!,
+                        title = getString(EXTRA_TITLE),
+                        details = getString(EXTRA_DETAILS),
+                        isStared = getBoolean(EXTRA_IS_STARED),
+                        dueDate = getSerializable(EXTRA_DUE_DATE, ZonedDateTime::class.java),
+                        isFinished = getBoolean(EXTRA_IS_FINISHED),
+                        dateAdded = getSerializable(EXTRA_DATE_ADDED, ZonedDateTime::class.java),
+                    )
+                } else {
+                    Task(
+                        taskID = getString(EXTRA_ID)!!,
+                        groupID = getString(EXTRA_GROUP_ID)!!,
+                        title = getString(EXTRA_TITLE),
+                        details = getString(EXTRA_DETAILS),
+                        isStared = getBoolean(EXTRA_IS_STARED),
+                        dueDate = getSerializable(EXTRA_DUE_DATE) as? ZonedDateTime,
+                        isFinished = getBoolean(EXTRA_IS_FINISHED),
+                        dateAdded = getSerializable(EXTRA_DATE_ADDED) as ZonedDateTime,
+                    )
+                }
+            }
+
+        }
+    }
+
+    //TODO: mb need the same functions for JSON
 }

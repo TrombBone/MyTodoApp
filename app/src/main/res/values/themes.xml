@@ -3,6 +3,14 @@
     <style name="Base.Theme.MyTodoApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+<!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
+
+        <!-- Optional: set to transparent if your app is drawing behind the status bar. -->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+
+        <!-- Optional: set for a light status bar with dark content. -->
+<!--        <item name="android:windowLightStatusBar">true</item>-->
     </style>
 
     <style name="Theme.MyTodoApp" parent="Base.Theme.MyTodoApp" />

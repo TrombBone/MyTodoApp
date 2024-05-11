@@ -13,25 +13,36 @@ import com.example.mytodoapp.extensions.setStrikeThroughEffect
 import com.google.android.material.checkbox.MaterialCheckBox
 import java.util.UUID
 
-class TaskAdapter(private val statusListener: TaskStatusListener) :
+class TaskAdapter(
+    private val statusListener: TaskStatusListener,
+    private val clickListener: OnTaskClickListener
+) :
     BaseAdapter<Task, TaskAdapter.TaskViewHolder>(TASK_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder =
-        TaskViewHolder.create(parent, statusListener)
+        TaskViewHolder.create(parent, statusListener, clickListener)
 
     override fun getItemId(position: Int): Long {
         val uuid = UUID.fromString(getItem(position).taskID)
         return uuid.mostSignificantBits
     }
 
-    class TaskViewHolder(itemView: View, private val statusListener: TaskStatusListener) :
+    class TaskViewHolder(
+        itemView: View,
+        private val statusListener: TaskStatusListener,
+        private val clickListener: OnTaskClickListener
+    ) :
         BaseViewHolder(itemView) {
 
         companion object {
-            fun create(parent: ViewGroup, statusListener: TaskStatusListener): TaskViewHolder {
+            fun create(
+                parent: ViewGroup,
+                statusListener: TaskStatusListener,
+                clickListener: OnTaskClickListener
+            ): TaskViewHolder {
                 val binding = ItemTaskBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-                return TaskViewHolder(binding.root, statusListener)
+                return TaskViewHolder(binding.root, statusListener, clickListener)
             }
         }
 
@@ -121,6 +132,11 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
                     }
                     */
 
+                    binding.root.isClickable = true
+                    binding.root.setOnClickListener {
+                        clickListener.onTaskClick(this)
+                    }
+
                 }
             }
         }
@@ -141,6 +157,10 @@ class TaskAdapter(private val statusListener: TaskStatusListener) :
 
     interface TaskStatusListener {
         fun onTaskUpdated(task: Task)
+    }
+
+    interface OnTaskClickListener {
+        fun onTaskClick(task: Task)
     }
 
 }

@@ -51,6 +51,10 @@ class TasksFragment : BaseFragment() {
         binding.addTaskFloatingActionButton.transitionName = TRANSITION_ELEMENT_ROOT
         binding.addTaskFloatingActionButton.setOnClickListener { showCreateTaskBottomSheet() }
 
+        requireActivity().window.navigationBarColor =
+            binding.tasksListBottomAppbar.backgroundTint?.defaultColor
+                ?: requireActivity().window.navigationBarColor
+
         binding.apply {
             groupsViewModel.allGroups.observe(viewLifecycleOwner) { tasksGroups ->
                 tasksGroups?.let { groups = it }
@@ -65,19 +69,23 @@ class TasksFragment : BaseFragment() {
                         }
                     }
                 }.attach()
+                tasksListContainerViewPager.post {
+                    tasksListContainerViewPager.setCurrentItem(1, false)
+                }
 
                 val addGroupTab = tabLayout.newTab().setIcon(R.drawable.ic_add_24)
                 tabLayout.addTab(addGroupTab)
 
+                // FIXME: correct with warning (write my own separated OnSelectListener() ?)
                 addGroupTab.view.isClickable = false
                 addGroupTab.view.setOnTouchListener { _, _ ->
                     showCreateGroupBottomSheet()
-                    view.performClick()
+                    false
                 }
 
-                tabLayout.selectTab(tabLayout.getTabAt(1))
             }
         }
+
 
         postponeEnterTransition()
         view.doOnPreDraw { startPostponedEnterTransition() }
@@ -132,6 +140,10 @@ class TasksFragment : BaseFragment() {
             val fragment = ItemTasksRecyclerPageFragment()
             fragment.arguments = Bundle().apply {
                 putInt(ItemTasksRecyclerPageFragment.ARG_KEY_POSITION, position)
+                putParcelableArrayList(
+                    ItemTasksRecyclerPageFragment.ARG_KEY_ALL_GROUPS,
+                    ArrayList<TasksGroup>(groups)
+                )
             }
             return fragment
         }

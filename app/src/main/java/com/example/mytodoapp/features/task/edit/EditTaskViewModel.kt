@@ -1,8 +1,72 @@
 package com.example.mytodoapp.features.task.edit
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.mytodoapp.database.entities.Task
+import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.database.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
+import javax.inject.Inject
 
-class EditTaskViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
+@HiltViewModel
+class EditTaskViewModel @Inject constructor(
+    private val repository: TaskRepository,
+//    private val preferenceManager: MySharedPreferenceManager
+) : ViewModel() {
+
+    private val _task = MutableStateFlow(Task())
+    val task: StateFlow<Task> = _task.asStateFlow()
+
+    private val _groups = MutableStateFlow(listOf<TasksGroup>())
+    val groups: StateFlow<List<TasksGroup>> = _groups.asStateFlow()
+
+    fun setTask(task: Task) {
+        _task.update { task }
+    }
+
+    fun setAllGroups(groupsList: List<TasksGroup>) {
+        _groups.update { groupsList }
+    }
+
+    // TODO: How will I use it?..
+    fun setGroup(groupID: String) {
+        _task.update { it.copy(groupID = groupID) }
+    }
+
+    fun setTitle(title: String?) {
+        _task.update { it.copy(title = title) }
+    }
+
+    fun setDetails(details: String?) {
+        _task.update { it.copy(details = details) }
+    }
+
+    fun setStared(isStared: Boolean = false) {
+        _task.update { it.copy(isStared = isStared) }
+    }
+
+    fun setFinished(isFinished: Boolean = false) {
+        _task.update { it.copy(isFinished = isFinished) }
+    }
+
+    fun setDueDate(dueDate: ZonedDateTime?) {
+        _task.update { it.copy(dueDate = dueDate) }
+    }
+
+    fun update(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
+        repository.update(task)
+    }
+
+    fun delete(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
+        repository.delete(task)
+    }
+
 }

@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
 import com.example.mytodoapp.database.entities.TasksGroup
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +20,7 @@ interface GroupDAO {
     @Update
     suspend fun update(group: TasksGroup)
 
-    @Query("SELECT * FROM groups ORDER BY taskGroupID")
+    @Query("SELECT * FROM groups")
     fun fetchAllGroups(): Flow<List<TasksGroup>>
 
     @Query("SELECT COUNT(*) FROM groups")
