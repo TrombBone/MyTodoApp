@@ -67,7 +67,7 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
                     when (currentPosition) {
                         0 -> list.filter { it.isStared }
                         1 -> list
-                        else -> list.filter { it.groupID == currentGroups[currentPosition].taskGroupID }
+                        else -> list.filter { it.groupID == currentGroups[currentPosition - 1].taskGroupID }
                     }
                 )
             }

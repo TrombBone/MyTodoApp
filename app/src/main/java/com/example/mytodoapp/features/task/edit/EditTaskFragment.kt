@@ -16,7 +16,6 @@ import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.FragmentEditTaskBinding
 import com.example.mytodoapp.extensions.setStrikeThroughEffect
-import com.example.mytodoapp.features.task.group.GroupsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -84,12 +83,23 @@ class EditTaskFragment : BaseFragment() {
 
                         if (hasDetails()) {
                             binding.editTaskDetailsEditText.setText(details)
-                            binding.editTaskTitleEditText.setStrikeThroughEffect(isFinished)
+                            binding.editTaskDetailsEditText.setStrikeThroughEffect(isFinished)
                         }
 
                         // FIXME: Text from res
                         binding.readyTaskFloatingActionButton.text =
                             if (isFinished) "Task no ready yet" else "Task ready"
+
+                        binding.readyTaskFloatingActionButton.setOnClickListener {
+                            editTaskViewModel.setFinished(!isFinished)
+                            // FIXME: Text from res
+                            binding.readyTaskFloatingActionButton.text =
+                                if (!isFinished) "Task no ready yet" else "Task ready"
+                            binding.editTaskTitleEditText.setStrikeThroughEffect(!isFinished)
+                            if (hasDetails())
+                                binding.editTaskDetailsEditText.setStrikeThroughEffect(!isFinished)
+                            navigateToTasksFragment()
+                        }
 
                         // TODO: Date
 //                        if (hasDueDate()) {
@@ -106,12 +116,14 @@ class EditTaskFragment : BaseFragment() {
                                     )
                                     true
                                 }
+
                                 R.id.delete -> {
                                     // TODO: create and call confirm delete dialog
                                     editTaskViewModel.delete(this)
                                     navigateToTasksFragment()
                                     true
                                 }
+
                                 else -> false
                             }
                         }
@@ -130,8 +142,8 @@ class EditTaskFragment : BaseFragment() {
     }
 
     override fun onPause() {
-        super.onPause()
         saveAndUpdateData()
+        super.onPause()
     }
 
     private fun showChooseGroupBottomSheet() {
@@ -139,8 +151,8 @@ class EditTaskFragment : BaseFragment() {
     }
 
     private fun navigateToTasksFragment() {
-        findNavController().navigate(R.id.action_edit_task_fragment_to_tasks_fragment)
         saveAndUpdateData()
+        findNavController().navigateUp()
     }
 
     private fun saveAndUpdateData() {
