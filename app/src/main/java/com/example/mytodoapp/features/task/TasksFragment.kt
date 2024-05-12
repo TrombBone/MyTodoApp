@@ -70,7 +70,7 @@ class TasksFragment : BaseFragment() {
                     }
                 }.attach()
                 tasksListContainerViewPager.post {
-                    tasksListContainerViewPager.setCurrentItem(1, false)
+                    tasksListContainerViewPager.setCurrentItem(lastSelectedPosition, false)
                 }
 
                 val addGroupTab = tabLayout.newTab().setIcon(R.drawable.ic_add_24)

@@ -12,7 +12,6 @@ import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
-import com.example.mytodoapp.features.task.TaskAdapter
 import com.example.mytodoapp.features.task.edit.EditTaskFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +27,7 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
     private val taskAdapter = TaskAdapter(this, this)
 
     private var currentPosition = 1
-    private var currentGroups = listOf<TasksGroup>()
+    private var groups = listOf<TasksGroup>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +44,7 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
                 currentPosition = getInt(ARG_KEY_POSITION)
             }
             takeIf { it.containsKey(ARG_KEY_ALL_GROUPS) }?.apply {
-                currentGroups = (
+                groups = (
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
                             getParcelableArrayList(ARG_KEY_ALL_GROUPS, TasksGroup::class.java)
                         else
@@ -67,7 +66,7 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
                     when (currentPosition) {
                         0 -> list.filter { it.isStared }
                         1 -> list
-                        else -> list.filter { it.groupID == currentGroups[currentPosition - 1].taskGroupID }
+                        else -> list.filter { it.groupID == groups[currentPosition - 1].taskGroupID }
                     }
                 )
             }
@@ -90,7 +89,7 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
                 putBundle(Task.EXTRA_TASK, Task.toBundle(task))
                 putParcelableArrayList(
                     EditTaskFragment.ARG_KEY_ALL_GROUPS,
-                    ArrayList<TasksGroup>(currentGroups)
+                    ArrayList<TasksGroup>(groups)
                 )
             }
         )

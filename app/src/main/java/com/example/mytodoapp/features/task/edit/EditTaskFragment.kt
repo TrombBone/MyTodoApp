@@ -16,6 +16,7 @@ import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.FragmentEditTaskBinding
 import com.example.mytodoapp.extensions.setStrikeThroughEffect
+import com.example.mytodoapp.features.task.group.choosebottomsheet.ChooseGroupBottomSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,6 +40,11 @@ class EditTaskFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().window.navigationBarColor =
+            binding.editTaskBottomAppbar.backgroundTint?.defaultColor
+                ?: requireActivity().window.navigationBarColor
+
         arguments?.apply {
             takeIf { it.containsKey(Task.EXTRA_TASK) }?.apply {
                 Task.fromBundle(getBundle(Task.EXTRA_TASK)!!)?.also { task ->
@@ -147,7 +153,11 @@ class EditTaskFragment : BaseFragment() {
     }
 
     private fun showChooseGroupBottomSheet() {
-        // TODO: create and show ChooseGroupBottomSheetFragment()
+        val chooseGroupBottomSheet = ChooseGroupBottomSheetFragment()
+        chooseGroupBottomSheet.show(
+            childFragmentManager,
+            ChooseGroupBottomSheetFragment.TAG
+        )
     }
 
     private fun navigateToTasksFragment() {

@@ -20,9 +20,6 @@ class RecyclerPageViewModel @Inject constructor(
 
     val tasks: LiveData<List<Task>> = repository.allTasks.asLiveData()
 
-    fun fetchTasksSelectedGroup(groupID: String) =
-        repository.fetchTasksSelectedGroup(groupID).asLiveData()
-
     fun update(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
         repository.update(task)
     }
