@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.example.mytodoapp.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.FragmentEditTaskBinding
 import com.example.mytodoapp.extensions.setStrikeThroughEffect
 import com.example.mytodoapp.features.task.group.choosebottomsheet.ChooseGroupBottomSheetFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -84,11 +86,13 @@ class EditTaskFragment : BaseFragment() {
                             taskGroups.find { task.groupID == it.taskGroupID }
                                 ?.groupTitle ?: "Group not found"
 
-                        binding.editTaskTitleEditText.setText(title)
+                        if (binding.editTaskTitleEditText.text.toString() != title)
+                            binding.editTaskTitleEditText.setText(title)
                         binding.editTaskTitleEditText.setStrikeThroughEffect(isFinished)
 
                         if (hasDetails()) {
-                            binding.editTaskDetailsEditText.setText(details)
+                            if (binding.editTaskDetailsEditText.text.toString() != details)
+                                binding.editTaskDetailsEditText.setText(details)
                             binding.editTaskDetailsEditText.setStrikeThroughEffect(isFinished)
                         }
 
@@ -104,7 +108,8 @@ class EditTaskFragment : BaseFragment() {
                             binding.editTaskTitleEditText.setStrikeThroughEffect(!isFinished)
                             if (hasDetails())
                                 binding.editTaskDetailsEditText.setStrikeThroughEffect(!isFinished)
-                            navigateToTasksFragment()
+                            if (!isFinished)
+                                navigateUpToTasksFragment()
                         }
 
                         // TODO: Date
@@ -124,9 +129,7 @@ class EditTaskFragment : BaseFragment() {
                                 }
 
                                 R.id.delete -> {
-                                    // TODO: create and call confirm delete dialog
-                                    editTaskViewModel.delete(this)
-                                    navigateToTasksFragment()
+                                    showConfirmDeleteDialog(this)
                                     true
                                 }
 
@@ -138,18 +141,38 @@ class EditTaskFragment : BaseFragment() {
             }
         }
 
-        binding.editToolbar.setNavigationOnClickListener {
-            navigateToTasksFragment()
-        }
+        with(binding) {
+            editTaskTitleEditText.doOnTextChanged { text, _, _, _ ->
+                editTaskViewModel.setTitle(text.toString())
+            }
 
-        binding.chooseTaskGroupButton.setOnClickListener {
-            showChooseGroupBottomSheet()
+            editTaskDetailsEditText.doOnTextChanged { text, _, _, _ ->
+                editTaskViewModel.setDetails(text.toString())
+            }
+
+            editToolbar.setNavigationOnClickListener {
+                navigateUpToTasksFragment()
+            }
+
+            chooseTaskGroupButton.setOnClickListener {
+                showChooseGroupBottomSheet()
+            }
         }
     }
 
-    override fun onPause() {
-        saveAndUpdateData()
-        super.onPause()
+    private fun showConfirmDeleteDialog(toDeleteTask: Task) {
+        MaterialAlertDialogBuilder(requireContext())
+            // FIXME: Text from res
+            .setTitle(/*resources.getString(R.string.title)*/"Are you sure you want to delete this task?")
+            .setNeutralButton(/*resources.getString(R.string.cancel)*/"Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton(/*resources.getString(R.string.accept)*/"Accept") { dialog, _ ->
+                editTaskViewModel.delete(toDeleteTask)
+                navigateUpToTasksFragment()
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun showChooseGroupBottomSheet() {
@@ -160,13 +183,23 @@ class EditTaskFragment : BaseFragment() {
         )
     }
 
-    private fun navigateToTasksFragment() {
-        saveAndUpdateData()
+    private fun navigateUpToTasksFragment() {
         findNavController().navigateUp()
     }
 
-    private fun saveAndUpdateData() {
-        // TODO: save and update data
+    private fun updateData() {
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                editTaskViewModel.task.collect { task ->
+                    editTaskViewModel.update(task)
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        updateData()
+        super.onPause()
     }
 
     override fun onDestroyView() {

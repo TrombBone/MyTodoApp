@@ -35,13 +35,15 @@ class CreateGroupModalBottomSheetFragment : BaseBottomSheet() {
 
             saveGroupButton.isEnabled = false
             addGroupTitleTextInputEditText.doOnTextChanged { text, _, _, _ ->
-                saveGroupButton.isEnabled = text.toString().trim().isNotEmpty()
+                saveGroupButton.isEnabled = !(text?.trim().isNullOrEmpty())
             }
 
             saveGroupButton.setOnClickListener {
                 val group = TasksGroup(
                     taskGroupID = UUID.randomUUID().toString(),
-                    groupTitle = addGroupTitleTextInputEditText.text.toString()
+                    groupTitle =
+                    if (addGroupTitleTextInputEditText.text?.trim().isNullOrEmpty()) null
+                    else addGroupTitleTextInputEditText.text!!.trim().toString()
                 )
 
                 createGroupBottomSheetViewModel.insert(group)

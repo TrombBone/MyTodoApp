@@ -44,14 +44,15 @@ class CreateTaskModalBottomSheetFragment : BaseBottomSheet() {
 
             saveTaskButton.isEnabled = false
             addTaskTitleEditText.doOnTextChanged { text, _, _, _ ->
-                saveTaskButton.isEnabled = text.toString().trim().isNotEmpty()
+                saveTaskButton.isEnabled = !(text?.trim().isNullOrEmpty())
             }
 
             saveTaskButton.setOnClickListener {
                 val task = Task(
-                    title = addTaskTitleEditText.text.toString(),
-                    details = if (addTaskDetailsEditText.text.isNullOrEmpty()) null
-                    else addTaskDetailsEditText.text.toString(),
+                    title = if (addTaskTitleEditText.text?.trim().isNullOrEmpty()) null
+                    else addTaskTitleEditText.text!!.trim().toString(),
+                    details = if (addTaskDetailsEditText.text?.trim().isNullOrEmpty()) null
+                    else addTaskDetailsEditText.text!!.trim().toString(),
                     //TODO
 //                    groupID =
                     isStared = setTaskStaredCheckBox.isChecked,

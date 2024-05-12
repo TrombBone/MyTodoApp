@@ -36,17 +36,16 @@ class EditTaskViewModel @Inject constructor(
         _groups.update { groupsList }
     }
 
-    // TODO: How will I use it?..
     fun setGroup(groupID: String) {
         _task.update { it.copy(groupID = groupID) }
     }
 
     fun setTitle(title: String?) {
-        _task.update { it.copy(title = title) }
+        _task.update { it.copy(title = if (title?.trim().isNullOrEmpty()) null else title) }
     }
 
     fun setDetails(details: String?) {
-        _task.update { it.copy(details = details) }
+        _task.update { it.copy(details = if (details?.trim().isNullOrEmpty()) null else details) }
     }
 
     fun setStared(isStared: Boolean = false) {
