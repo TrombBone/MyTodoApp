@@ -64,19 +64,20 @@ class TasksFragment : BaseFragment() {
                     when (position) {
                         0 -> tab.setIcon(R.drawable.ic_star_fill_24)
                         else -> {
-                            // FIXME: how will it work after adding a new group?
                             tab.text = groups[position - 1].groupTitle ?: "Group $position"
+                            // FIXME: !Workaround for tab click without select!
+                            tab.view.setOnTouchListener(null)
+                            tab.view.isClickable = true
                         }
                     }
                 }.attach()
                 tasksListContainerViewPager.post {
                     tasksListContainerViewPager.setCurrentItem(lastSelectedPosition, false)
                 }
-
                 val addGroupTab = tabLayout.newTab().setIcon(R.drawable.ic_add_24)
                 tabLayout.addTab(addGroupTab)
 
-                // FIXME: correct with warning (write my own separated OnSelectListener() ?)
+                // FIXME: !Workaround for tab click without select! (write my OnSelectListener() ?)
                 addGroupTab.view.isClickable = false
                 addGroupTab.view.setOnTouchListener { _, _ ->
                     showCreateGroupBottomSheet()
@@ -115,6 +116,7 @@ class TasksFragment : BaseFragment() {
     }
 
     private fun showCreateGroupBottomSheet() {
+        lastSelectedPosition = binding.tasksListContainerViewPager.currentItem
         val createGroupModalBottomSheet = CreateGroupModalBottomSheetFragment()
         createGroupModalBottomSheet.show(
             childFragmentManager,
