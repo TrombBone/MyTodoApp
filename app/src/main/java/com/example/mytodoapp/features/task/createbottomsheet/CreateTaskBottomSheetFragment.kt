@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 private const val ARG_SELECTED_GROUP_ID = "ARG_SELECTED_GROUP_ID"
 
 @AndroidEntryPoint
-class CreateTaskBottomSheetFragment private constructor() : BaseBottomSheet() {
+class CreateTaskBottomSheetFragment : BaseBottomSheet() {
     private var selectedGroupID: String? = null
 
     private var _binding: BottomSheetCreateTaskBinding? = null

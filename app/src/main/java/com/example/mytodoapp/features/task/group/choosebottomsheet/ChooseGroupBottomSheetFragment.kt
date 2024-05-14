@@ -76,5 +76,8 @@ class ChooseGroupBottomSheetFragment : BaseBottomSheet(), GroupAdapter.OnGroupCl
 
     companion object {
         val TAG: String = this::class.java.name
+
+        @JvmStatic
+        fun newInstance() = ChooseGroupBottomSheetFragment()
     }
 }

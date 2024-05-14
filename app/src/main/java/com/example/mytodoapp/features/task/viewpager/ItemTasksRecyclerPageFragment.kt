@@ -15,19 +15,39 @@ import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.task.edit.EditTaskFragment
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val ARG_POSITION = "ARG_POSITION"
+private const val ARG_ALL_GROUPS = "ARG_ALL_GROUPS"
+
 @AndroidEntryPoint
 class ItemTasksRecyclerPageFragment : BaseFragment(),
     TaskAdapter.TaskStatusListener, TaskAdapter.OnTaskClickListener {
+    private var position = 1
+    private var groups: List<TasksGroup> = listOf(TasksGroup("1", "My Tasks"))
 
     private var _binding: ItemTasksRecyclerViewBinding? = null
+
     private val binding get() = _binding!!
 
     private val recyclerPageViewModel: RecyclerPageViewModel by viewModels()
 
     private val taskAdapter = TaskAdapter(this, this)
 
-    private var currentPosition = 1
-    private var groups = listOf<TasksGroup>()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.apply {
+            takeIf { it.containsKey(ARG_POSITION) }?.apply {
+                position = getInt(ARG_POSITION)
+            }
+            takeIf { it.containsKey(ARG_ALL_GROUPS) }?.apply {
+                groups = (
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                            getParcelableArrayList(ARG_ALL_GROUPS, TasksGroup::class.java)
+                        else
+                            getParcelableArrayList<TasksGroup>(ARG_ALL_GROUPS)
+                        )?.toList() ?: listOf()
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,20 +59,6 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.apply {
-            takeIf { it.containsKey(ARG_KEY_POSITION) }?.apply {
-                currentPosition = getInt(ARG_KEY_POSITION)
-            }
-            takeIf { it.containsKey(ARG_KEY_ALL_GROUPS) }?.apply {
-                groups = (
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                            getParcelableArrayList(ARG_KEY_ALL_GROUPS, TasksGroup::class.java)
-                        else
-                            getParcelableArrayList<TasksGroup>(ARG_KEY_ALL_GROUPS)
-                        )?.toList() ?: listOf()
-            }
-        }
-
         taskAdapter.setHasStableIds(true)
         binding.itemTasksRecycler.adapter = taskAdapter
     }
@@ -63,10 +69,10 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
         recyclerPageViewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             tasks?.let { list ->
                 taskAdapter.submitList(
-                    when (currentPosition) {
+                    when (position) {
                         0 -> list.filter { it.isStared }
                         1 -> list
-                        else -> list.filter { it.groupID == groups[currentPosition - 1].taskGroupID }
+                        else -> list.filter { it.groupID == groups[position - 1].taskGroupID }
                     }
                 )
             }
@@ -88,7 +94,7 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
             Bundle().apply {
                 putBundle(Task.EXTRA_TASK, Task.toBundle(task))
                 putParcelableArrayList(
-                    EditTaskFragment.ARG_KEY_ALL_GROUPS,
+                    EditTaskFragment.ARG_ALL_GROUPS,
                     ArrayList<TasksGroup>(groups)
                 )
             }
@@ -96,7 +102,13 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
     }
 
     companion object {
-        val ARG_KEY_POSITION: String = "${this::class.java.name}_ARG_KEY_POSITION"
-        val ARG_KEY_ALL_GROUPS: String = "${this::class.java.name}_ARG_KEY_ALL_GROUPS"
+        @JvmStatic
+        fun newInstance(position: Int, allGroups: List<TasksGroup>) =
+            ItemTasksRecyclerPageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_POSITION, position)
+                    putParcelableArrayList(ARG_ALL_GROUPS, ArrayList<TasksGroup>(allGroups))
+                }
+            }
     }
 }

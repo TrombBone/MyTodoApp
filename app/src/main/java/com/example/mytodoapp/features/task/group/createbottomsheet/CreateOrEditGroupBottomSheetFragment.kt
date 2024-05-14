@@ -16,7 +16,7 @@ import java.util.UUID
 private const val ARG_SELECTED_GROUP_ID = "ARG_SELECTED_GROUP_ID"
 
 @AndroidEntryPoint
-class CreateOrEditGroupBottomSheetFragment private constructor(): BaseBottomSheet() {
+class CreateOrEditGroupBottomSheetFragment : BaseBottomSheet() {
     private var selectedGroupID: String? = null
     private var isEditInsteadCreate: Boolean = false
 

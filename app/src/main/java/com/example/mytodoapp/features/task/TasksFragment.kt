@@ -15,6 +15,7 @@ import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.FragmentTasksBinding
 import com.example.mytodoapp.features.task.createbottomsheet.CreateTaskBottomSheetFragment
+import com.example.mytodoapp.features.task.edit.EditTaskFragment.Companion.ARG_ALL_GROUPS
 import com.example.mytodoapp.features.task.group.GroupsViewModel
 import com.example.mytodoapp.features.task.group.createbottomsheet.CreateOrEditGroupBottomSheetFragment
 import com.example.mytodoapp.features.task.group.editbottomsheet.GroupEditActionsBottomSheetFragment
@@ -22,6 +23,8 @@ import com.example.mytodoapp.features.task.viewpager.ItemTasksRecyclerPageFragme
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+
+private const val KEY_LAST_SELECTED_TAB = "KEY_LAST_SELECTED_TAB"
 
 @AndroidEntryPoint
 class TasksFragment : BaseFragment() {
@@ -31,14 +34,13 @@ class TasksFragment : BaseFragment() {
 
     private val groupsViewModel: GroupsViewModel by viewModels()
 
-    private var groups: List<TasksGroup> = listOf()
+    private var allGroups: List<TasksGroup> = listOf()
 
-    private val LAST_SELECTED_TAB_KEY = "LAST_SELECTED_TAB_KEY"
     private var lastSelectedPosition = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lastSelectedPosition = savedInstanceState?.getInt(LAST_SELECTED_TAB_KEY, 1) ?: 1
+        lastSelectedPosition = savedInstanceState?.getInt(KEY_LAST_SELECTED_TAB, 1) ?: 1
     }
 
     override fun onCreateView(
@@ -76,14 +78,14 @@ class TasksFragment : BaseFragment() {
         // Update UI
         binding.apply {
             groupsViewModel.allGroups.observe(viewLifecycleOwner) { tasksGroups ->
-                tasksGroups?.let { groups = it }
+                tasksGroups?.let { allGroups = it }
 
                 tasksListContainerViewPager.adapter = TasksListViewPagerAdapter(requireActivity())
                 TabLayoutMediator(tabLayout, tasksListContainerViewPager) { tab, position ->
                     when (position) {
                         0 -> tab.setIcon(R.drawable.ic_star_fill_24)
                         else -> {
-                            tab.text = groups[position - 1].groupTitle ?: "Group $position"
+                            tab.text = allGroups[position - 1].groupTitle ?: "Group $position"
                             // FIXME: !Workaround for tab click without select!
                             tab.view.setOnTouchListener(null)
                             tab.view.isClickable = true
@@ -132,12 +134,12 @@ class TasksFragment : BaseFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(LAST_SELECTED_TAB_KEY, lastSelectedPosition)
+        outState.putInt(KEY_LAST_SELECTED_TAB, lastSelectedPosition)
     }
 
     private fun showCreateTaskBottomSheet() {
         val selectedGroupID =
-            groups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID
+            allGroups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID
         val createTaskModalBottomSheet =
             CreateTaskBottomSheetFragment.newInstance(selectedGroupID)
         createTaskModalBottomSheet.show(
@@ -158,7 +160,7 @@ class TasksFragment : BaseFragment() {
 
     private fun showGroupEditActionsBottomSheet() {
         val selectedGroupID =
-            groups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID
+            allGroups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID
         val groupEditActionsBottomSheet =
             GroupEditActionsBottomSheetFragment.newInstance(selectedGroupID)
         groupEditActionsBottomSheet.show(
@@ -179,19 +181,15 @@ class TasksFragment : BaseFragment() {
     private inner class TasksListViewPagerAdapter(activity: FragmentActivity) :
         FragmentStateAdapter(activity) {
 
-        override fun getItemCount() = groups.size + 1
+        override fun getItemCount() = allGroups.size + 1
 
-        override fun createFragment(position: Int): Fragment {
-            val fragment = ItemTasksRecyclerPageFragment()
-            fragment.arguments = Bundle().apply {
-                putInt(ItemTasksRecyclerPageFragment.ARG_KEY_POSITION, position)
-                putParcelableArrayList(
-                    ItemTasksRecyclerPageFragment.ARG_KEY_ALL_GROUPS,
-                    ArrayList<TasksGroup>(groups)
-                )
-            }
-            return fragment
-        }
+        override fun createFragment(position: Int): Fragment =
+            ItemTasksRecyclerPageFragment.newInstance(position, allGroups)
 
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance() = TasksFragment()
     }
 }

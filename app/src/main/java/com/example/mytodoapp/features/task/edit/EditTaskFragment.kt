@@ -24,13 +24,12 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class EditTaskFragment : BaseFragment() {
+    private var allGroups = listOf<TasksGroup>(TasksGroup("1", "My Tasks"))
 
     private var _binding: FragmentEditTaskBinding? = null
     private val binding get() = _binding!!
 
     private val editTaskViewModel: EditTaskViewModel by viewModels()
-
-    private var taskGroups = listOf<TasksGroup>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,12 +53,12 @@ class EditTaskFragment : BaseFragment() {
                     binding.root.transitionName = TRANSITION_ELEMENT_ROOT + task.taskID
                 }
             }
-            takeIf { it.containsKey(ARG_KEY_ALL_GROUPS) }?.apply {
+            takeIf { it.containsKey(ARG_ALL_GROUPS) }?.apply {
                 val groups = (
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                            getParcelableArrayList(ARG_KEY_ALL_GROUPS, TasksGroup::class.java)
+                            getParcelableArrayList(ARG_ALL_GROUPS, TasksGroup::class.java)
                         else
-                            getParcelableArrayList<TasksGroup>(ARG_KEY_ALL_GROUPS)
+                            getParcelableArrayList<TasksGroup>(ARG_ALL_GROUPS)
                         )!!.toList()
                 editTaskViewModel.setAllGroups(groups)
             }
@@ -68,7 +67,7 @@ class EditTaskFragment : BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editTaskViewModel.groups.collect { groups ->
-                    taskGroups = groups
+                    allGroups = groups
                 }
             }
         }
@@ -83,7 +82,7 @@ class EditTaskFragment : BaseFragment() {
                         )
 
                         binding.chooseTaskGroupButton.text =
-                            taskGroups.find { task.groupID == it.taskGroupID }
+                            allGroups.find { task.groupID == it.taskGroupID }
                                 ?.groupTitle ?: "Group not found"
 
                         if (binding.editTaskTitleEditText.text.toString() != title)
@@ -176,7 +175,8 @@ class EditTaskFragment : BaseFragment() {
     }
 
     private fun showChooseGroupBottomSheet() {
-        val chooseGroupBottomSheet = ChooseGroupBottomSheetFragment()
+        val chooseGroupBottomSheet =
+            ChooseGroupBottomSheetFragment.newInstance()
         chooseGroupBottomSheet.show(
             childFragmentManager,
             ChooseGroupBottomSheetFragment.TAG
@@ -208,6 +208,16 @@ class EditTaskFragment : BaseFragment() {
     }
 
     companion object {
-        val ARG_KEY_ALL_GROUPS = "${this::class.java.name}_ARG_KEY_ALL_GROUPS"
+
+        const val ARG_ALL_GROUPS = "ARG_ALL_GROUPS"
+
+        @JvmStatic
+        fun newInstance(task: Task, allGroups: List<TasksGroup>) =
+            EditTaskFragment().apply {
+                arguments = Bundle().apply {
+                    putBundle(Task.EXTRA_TASK, Task.toBundle(task))
+                    putParcelableArrayList(ARG_ALL_GROUPS, ArrayList<TasksGroup>(allGroups))
+                }
+            }
     }
 }
