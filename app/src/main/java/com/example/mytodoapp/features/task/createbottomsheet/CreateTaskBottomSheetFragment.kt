@@ -13,7 +13,7 @@ import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreateTaskModalBottomSheetFragment : BaseBottomSheet() {
+class CreateTaskBottomSheetFragment : BaseBottomSheet() {
 
     private var _binding: BottomSheetCreateTaskBinding? = null
     private val binding get() = _binding!!
@@ -62,7 +62,7 @@ class CreateTaskModalBottomSheetFragment : BaseBottomSheet() {
 
                 createTaskBottomSheetViewModel.insert(task)
 
-                this@CreateTaskModalBottomSheetFragment.dismiss()
+                this@CreateTaskBottomSheetFragment.dismiss()
             }
         }
     }

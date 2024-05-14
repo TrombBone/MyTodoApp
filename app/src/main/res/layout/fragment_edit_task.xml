@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:menu="@menu/edit_task_menu"
+            app:menu="@menu/edit_task_fragment_top_app_bar_menu"
             app:navigationIcon="@drawable/ic_arrow_back_24" />
 
     </com.google.android.material.appbar.AppBarLayout>

@@ -20,8 +20,6 @@ class GroupsViewModel @Inject constructor(
 
     val allGroups: LiveData<List<TasksGroup>> = repository.allGroups.asLiveData()
 
-    val groupsCount: LiveData<Int> = repository.countGroups.asLiveData()
-
     fun insert(group: TasksGroup) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
         repository.insert(group)
     }

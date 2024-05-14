@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.children
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -13,10 +14,12 @@ import com.example.mytodoapp.R
 import com.example.mytodoapp.abstracts.BaseFragment
 import com.example.mytodoapp.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.FragmentTasksBinding
-import com.example.mytodoapp.features.task.createbottomsheet.CreateTaskModalBottomSheetFragment
+import com.example.mytodoapp.features.task.createbottomsheet.CreateTaskBottomSheetFragment
 import com.example.mytodoapp.features.task.group.GroupsViewModel
-import com.example.mytodoapp.features.task.group.createbottomsheet.CreateGroupModalBottomSheetFragment
+import com.example.mytodoapp.features.task.group.createbottomsheet.CreateOrEditGroupBottomSheetFragment
+import com.example.mytodoapp.features.task.group.editbottomsheet.GroupEditActionsBottomSheetFragment
 import com.example.mytodoapp.features.task.viewpager.ItemTasksRecyclerPageFragment
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,10 +54,26 @@ class TasksFragment : BaseFragment() {
         binding.addTaskFloatingActionButton.transitionName = TRANSITION_ELEMENT_ROOT
         binding.addTaskFloatingActionButton.setOnClickListener { showCreateTaskBottomSheet() }
 
+        binding.tasksBottomAppbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.group_actions -> {
+                    showGroupEditActionsBottomSheet()
+                    true
+                }
+                // TODO: create sort
+//                R.id.sort -> {
+//                    // Handle sort icon press
+//                    true
+//                }
+                else -> false
+            }
+        }
+
         requireActivity().window.navigationBarColor =
-            binding.tasksListBottomAppbar.backgroundTint?.defaultColor
+            binding.tasksBottomAppbar.backgroundTint?.defaultColor
                 ?: requireActivity().window.navigationBarColor
 
+        // Update UI
         binding.apply {
             groupsViewModel.allGroups.observe(viewLifecycleOwner) { tasksGroups ->
                 tasksGroups?.let { groups = it }
@@ -83,8 +102,17 @@ class TasksFragment : BaseFragment() {
                     showCreateGroupBottomSheet()
                     false
                 }
-
             }
+
+            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    binding.tasksBottomAppbar.menu.children.find { it.itemId == R.id.group_actions }
+                        ?.isVisible = tab.position > 1
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {}
+                override fun onTabReselected(tab: TabLayout.Tab) {}
+            })
         }
 
 
@@ -108,19 +136,28 @@ class TasksFragment : BaseFragment() {
     }
 
     private fun showCreateTaskBottomSheet() {
-        val createTaskModalBottomSheet = CreateTaskModalBottomSheetFragment()
+        val createTaskModalBottomSheet = CreateTaskBottomSheetFragment()
         createTaskModalBottomSheet.show(
             childFragmentManager,
-            CreateTaskModalBottomSheetFragment.TAG
+            CreateTaskBottomSheetFragment.TAG
         )
     }
 
     private fun showCreateGroupBottomSheet() {
         lastSelectedPosition = binding.tasksListContainerViewPager.currentItem
-        val createGroupModalBottomSheet = CreateGroupModalBottomSheetFragment()
+        val createGroupModalBottomSheet = CreateOrEditGroupBottomSheetFragment.newCreateInstance()
         createGroupModalBottomSheet.show(
             childFragmentManager,
-            CreateGroupModalBottomSheetFragment.TAG
+            CreateOrEditGroupBottomSheetFragment.TAG
+        )
+    }
+
+    private fun showGroupEditActionsBottomSheet() {
+        val createGroupModalBottomSheet = GroupEditActionsBottomSheetFragment
+            .newInstance(groups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID)
+        createGroupModalBottomSheet.show(
+            childFragmentManager,
+            CreateOrEditGroupBottomSheetFragment.TAG
         )
     }
 
