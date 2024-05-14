@@ -12,13 +12,25 @@ import com.example.mytodoapp.database.entities.Task
 import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val ARG_SELECTED_GROUP_ID = "ARG_SELECTED_GROUP_ID"
+
 @AndroidEntryPoint
-class CreateTaskBottomSheetFragment : BaseBottomSheet() {
+class CreateTaskBottomSheetFragment private constructor() : BaseBottomSheet() {
+    private var selectedGroupID: String? = null
 
     private var _binding: BottomSheetCreateTaskBinding? = null
     private val binding get() = _binding!!
 
     private val createTaskBottomSheetViewModel: CreateTaskBottomSheetViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.apply {
+            takeIf { it.containsKey(ARG_SELECTED_GROUP_ID) }?.apply {
+                selectedGroupID = getString(ARG_SELECTED_GROUP_ID)!!
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,8 +65,7 @@ class CreateTaskBottomSheetFragment : BaseBottomSheet() {
                     else addTaskTitleEditText.text!!.trim().toString(),
                     details = if (addTaskDetailsEditText.text?.trim().isNullOrEmpty()) null
                     else addTaskDetailsEditText.text!!.trim().toString(),
-                    //TODO
-//                    groupID =
+                    groupID = selectedGroupID ?: "1",
                     isStared = setTaskStaredCheckBox.isChecked,
                     //TODO
 //                    dueDate =
@@ -74,5 +85,13 @@ class CreateTaskBottomSheetFragment : BaseBottomSheet() {
 
     companion object {
         val TAG: String = this::class.java.name
+
+        @JvmStatic
+        fun newInstance(selectedGroupID: String) =
+            CreateTaskBottomSheetFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_SELECTED_GROUP_ID, selectedGroupID)
+                }
+            }
     }
 }

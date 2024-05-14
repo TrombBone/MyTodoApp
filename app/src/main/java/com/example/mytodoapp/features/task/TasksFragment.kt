@@ -136,7 +136,10 @@ class TasksFragment : BaseFragment() {
     }
 
     private fun showCreateTaskBottomSheet() {
-        val createTaskModalBottomSheet = CreateTaskBottomSheetFragment()
+        val selectedGroupID =
+            groups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID
+        val createTaskModalBottomSheet =
+            CreateTaskBottomSheetFragment.newInstance(selectedGroupID)
         createTaskModalBottomSheet.show(
             childFragmentManager,
             CreateTaskBottomSheetFragment.TAG
@@ -145,17 +148,20 @@ class TasksFragment : BaseFragment() {
 
     private fun showCreateGroupBottomSheet() {
         lastSelectedPosition = binding.tasksListContainerViewPager.currentItem
-        val createGroupModalBottomSheet = CreateOrEditGroupBottomSheetFragment.newCreateInstance()
-        createGroupModalBottomSheet.show(
+        val createGroupBottomSheet =
+            CreateOrEditGroupBottomSheetFragment.newCreateInstance()
+        createGroupBottomSheet.show(
             childFragmentManager,
             CreateOrEditGroupBottomSheetFragment.TAG
         )
     }
 
     private fun showGroupEditActionsBottomSheet() {
-        val createGroupModalBottomSheet = GroupEditActionsBottomSheetFragment
-            .newInstance(groups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID)
-        createGroupModalBottomSheet.show(
+        val selectedGroupID =
+            groups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID
+        val groupEditActionsBottomSheet =
+            GroupEditActionsBottomSheetFragment.newInstance(selectedGroupID)
+        groupEditActionsBottomSheet.show(
             childFragmentManager,
             CreateOrEditGroupBottomSheetFragment.TAG
         )
