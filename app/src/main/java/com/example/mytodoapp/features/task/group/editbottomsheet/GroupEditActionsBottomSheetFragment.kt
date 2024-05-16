@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.mytodoapp.abstracts.BaseBottomSheet
-import com.example.mytodoapp.database.entities.Task
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.components.abstracts.BaseBottomSheet
 import com.example.mytodoapp.databinding.BottomSheetGroupEditActionsBinding
+import com.example.mytodoapp.features.database.entities.Task
+import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.task.TasksViewModel
 import com.example.mytodoapp.features.task.group.GroupsViewModel
 import com.example.mytodoapp.features.task.group.createbottomsheet.CreateOrEditGroupBottomSheetFragment

@@ -1,13 +1,13 @@
-package com.example.mytodoapp.database
+package com.example.mytodoapp.features.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.mytodoapp.database.converters.DateTimeConverter
-import com.example.mytodoapp.database.dao.GroupDAO
-import com.example.mytodoapp.database.dao.TaskDAO
-import com.example.mytodoapp.database.entities.Task
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.features.database.converters.DateTimeConverter
+import com.example.mytodoapp.features.database.dao.GroupDAO
+import com.example.mytodoapp.features.database.dao.TaskDAO
+import com.example.mytodoapp.features.database.entities.Task
+import com.example.mytodoapp.features.database.entities.TasksGroup
 
 @Database(
     entities = [Task::class, TasksGroup::class], // , Schedule::class

@@ -8,8 +8,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.mytodoapp.abstracts.BaseBottomSheet
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.components.abstracts.BaseBottomSheet
+import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.BottomSheetChooseGroupBinding
 import com.example.mytodoapp.features.task.edit.EditTaskViewModel
 import dagger.hilt.android.AndroidEntryPoint

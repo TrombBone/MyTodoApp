@@ -5,22 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
-import com.example.mytodoapp.abstracts.BaseAdapter
-import com.example.mytodoapp.abstracts.BaseFragment
-import com.example.mytodoapp.database.entities.Task
+import com.example.mytodoapp.components.abstracts.BaseAdapter
+import com.example.mytodoapp.components.abstracts.BaseFragment
+import com.example.mytodoapp.components.extensions.setStrikeThroughEffect
 import com.example.mytodoapp.databinding.ItemTaskBinding
-import com.example.mytodoapp.extensions.setStrikeThroughEffect
+import com.example.mytodoapp.features.database.entities.Task
 import com.google.android.material.checkbox.MaterialCheckBox
 import java.util.UUID
 
-class TaskAdapter(
-    private val statusListener: TaskStatusListener,
-    private val clickListener: OnTaskClickListener
-) :
+class TaskAdapter(private val statusListener: TaskStatusListener) :
     BaseAdapter<Task, TaskAdapter.TaskViewHolder>(TASK_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder =
-        TaskViewHolder.create(parent, statusListener, clickListener)
+        TaskViewHolder.create(parent, statusListener)
 
     override fun getItemId(position: Int): Long {
         val uuid = UUID.fromString(getItem(position).taskID)
@@ -29,20 +26,18 @@ class TaskAdapter(
 
     class TaskViewHolder(
         itemView: View,
-        private val statusListener: TaskStatusListener,
-        private val clickListener: OnTaskClickListener
+        private val statusListener: TaskStatusListener
     ) :
         BaseViewHolder(itemView) {
 
         companion object {
             fun create(
                 parent: ViewGroup,
-                statusListener: TaskStatusListener,
-                clickListener: OnTaskClickListener
+                statusListener: TaskStatusListener
             ): TaskViewHolder {
                 val binding = ItemTaskBinding
                     .inflate(LayoutInflater.from(parent.context), parent, false)
-                return TaskViewHolder(binding.root, statusListener, clickListener)
+                return TaskViewHolder(binding.root, statusListener)
             }
         }
 
@@ -57,19 +52,29 @@ class TaskAdapter(
                 binding.taskTitleTextview.text = title
                 binding.taskTitleTextview.setStrikeThroughEffect(isFinished)
 
-                if (hasDetails()) {
-                    binding.taskDetailsTextview.isVisible = true
-                    binding.taskDetailsTextview.text = details
-                    binding.taskDetailsTextview.setStrikeThroughEffect(isFinished)
-                } else {
-                    binding.taskDetailsTextview.isVisible = false
+                with(binding.taskDetailsTextview) {
+                    if (hasDetails()) {
+                        isVisible = true
+                        text = details
+                        setStrikeThroughEffect(isFinished)
+                    } else {
+                        isVisible = false
+                    }
                 }
 
-                if (hasDueDate()) {
-                    binding.taskDatetimeChip.isVisible = true
-                    binding.taskDatetimeChip.text = formatDueDate(binding.root.context)
-                } else {
-                    binding.taskDatetimeChip.isVisible = false
+                with(binding.taskDatetimeChip) {
+                    if (hasDueDate()) {
+                        isVisible = true
+                        text = formatDueDateTime(binding.root.context)
+                        setOnClickListener {
+                            statusListener.onDueDateTimeChipClick(item)
+                        }
+                        setOnCloseIconClickListener {
+                            statusListener.onTaskUpdated(copy(dueDate = null, dueTime = null))
+                        }
+                    } else {
+                        isVisible = false
+                    }
                 }
 
                 binding.taskStaredCheckBox.isChecked = isStared
@@ -133,7 +138,7 @@ class TaskAdapter(
 
                 binding.root.isClickable = true
                 binding.root.setOnClickListener {
-                    clickListener.onTaskClick(this)
+                    statusListener.onTaskClick(this)
                 }
             }
         }
@@ -151,10 +156,10 @@ class TaskAdapter(
 
     interface TaskStatusListener {
         fun onTaskUpdated(task: Task)
-    }
 
-    interface OnTaskClickListener {
         fun onTaskClick(task: Task)
+
+        fun onDueDateTimeChipClick(task: Task)
     }
 
 }

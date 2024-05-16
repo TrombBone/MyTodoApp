@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import com.example.mytodoapp.abstracts.BaseAdapter
-import com.example.mytodoapp.abstracts.BaseFragment
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.components.abstracts.BaseAdapter
+import com.example.mytodoapp.components.abstracts.BaseFragment
+import com.example.mytodoapp.components.extensions.setDrawableChecked
 import com.example.mytodoapp.databinding.ItemGroupBinding
-import com.example.mytodoapp.extensions.setDrawableChecked
+import com.example.mytodoapp.features.database.entities.TasksGroup
 import java.util.UUID
 
 class GroupAdapter(

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mytodoapp.R
-import com.example.mytodoapp.abstracts.BaseActivity
+import com.example.mytodoapp.components.abstracts.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

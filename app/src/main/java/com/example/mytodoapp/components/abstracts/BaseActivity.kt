@@ -1,4 +1,4 @@
-package com.example.mytodoapp.abstracts
+package com.example.mytodoapp.components.abstracts
 
 import android.os.Build
 import android.os.Bundle

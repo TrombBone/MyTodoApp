@@ -12,15 +12,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.mytodoapp.R
-import com.example.mytodoapp.abstracts.BaseFragment
-import com.example.mytodoapp.database.entities.Task
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.components.abstracts.BaseFragment
+import com.example.mytodoapp.components.extensions.setStrikeThroughEffect
 import com.example.mytodoapp.databinding.FragmentEditTaskBinding
-import com.example.mytodoapp.extensions.setStrikeThroughEffect
+import com.example.mytodoapp.features.database.converters.DateTimeConverter
+import com.example.mytodoapp.features.database.entities.Task
+import com.example.mytodoapp.features.database.entities.TasksGroup
+import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
 import com.example.mytodoapp.features.task.group.choosebottomsheet.ChooseGroupBottomSheetFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
 
 @AndroidEntryPoint
 class EditTaskFragment : BaseFragment() {
@@ -30,6 +34,29 @@ class EditTaskFragment : BaseFragment() {
     private val binding get() = _binding!!
 
     private val editTaskViewModel: EditTaskViewModel by viewModels()
+
+    private var date: LocalDate? = null
+    private var time: LocalTime? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.apply {
+            takeIf { it.containsKey(Task.EXTRA_TASK) }?.apply {
+                Task.fromBundle(getBundle(Task.EXTRA_TASK)!!)?.also { task ->
+                    editTaskViewModel.setTask(task)
+                }
+            }
+            takeIf { it.containsKey(ARG_ALL_GROUPS) }?.apply {
+                val groups = (
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                            getParcelableArrayList(ARG_ALL_GROUPS, TasksGroup::class.java)
+                        else
+                            getParcelableArrayList<TasksGroup>(ARG_ALL_GROUPS)
+                        )!!.toList()
+                editTaskViewModel.setAllGroups(groups)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,24 +73,6 @@ class EditTaskFragment : BaseFragment() {
             binding.editTaskBottomAppbar.backgroundTint?.defaultColor
                 ?: requireActivity().window.navigationBarColor
 
-        arguments?.apply {
-            takeIf { it.containsKey(Task.EXTRA_TASK) }?.apply {
-                Task.fromBundle(getBundle(Task.EXTRA_TASK)!!)?.also { task ->
-                    editTaskViewModel.setTask(task)
-                    binding.root.transitionName = TRANSITION_ELEMENT_ROOT + task.taskID
-                }
-            }
-            takeIf { it.containsKey(ARG_ALL_GROUPS) }?.apply {
-                val groups = (
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                            getParcelableArrayList(ARG_ALL_GROUPS, TasksGroup::class.java)
-                        else
-                            getParcelableArrayList<TasksGroup>(ARG_ALL_GROUPS)
-                        )!!.toList()
-                editTaskViewModel.setAllGroups(groups)
-            }
-        }
-
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editTaskViewModel.groups.collect { groups ->
@@ -76,13 +85,15 @@ class EditTaskFragment : BaseFragment() {
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 editTaskViewModel.task.collect { task ->
+                    binding.root.transitionName = TRANSITION_ELEMENT_ROOT + task.taskID
+
                     with(task) {
                         binding.editToolbar.menu.getItem(0).setIcon(
                             if (isStared) R.drawable.ic_star_fill_24 else R.drawable.sl_stared_24dp
                         )
 
                         binding.chooseTaskGroupButton.text =
-                            allGroups.find { task.groupID == it.taskGroupID }
+                            allGroups.find { groupID == it.taskGroupID }
                                 ?.groupTitle ?: "Group not found"
 
                         if (binding.editTaskTitleEditText.text.toString() != title)
@@ -111,10 +122,11 @@ class EditTaskFragment : BaseFragment() {
                                 navigateUpToTasksFragment()
                         }
 
-                        // TODO: Date
-//                        if (hasDueDate()) {
-//                            binding.editDateTimeButton
-//                        }
+                        // TODO: Make Chip, no just button text
+                        with(binding.editDateTimeButton) {
+                            if (hasDueDate()) text = task.formatDueDateTime(requireContext())
+                            setOnClickListener { showDateTimePickerDialog(task) }
+                        }
 
                         binding.editToolbar.setOnMenuItemClickListener { menuItem ->
                             when (menuItem.itemId) {
@@ -142,11 +154,11 @@ class EditTaskFragment : BaseFragment() {
 
         with(binding) {
             editTaskTitleEditText.doOnTextChanged { text, _, _, _ ->
-                editTaskViewModel.setTitle(text.toString())
+                editTaskViewModel.setTitle(text?.toString())
             }
 
             editTaskDetailsEditText.doOnTextChanged { text, _, _, _ ->
-                editTaskViewModel.setDetails(text.toString())
+                editTaskViewModel.setDetails(text?.toString())
             }
 
             editToolbar.setNavigationOnClickListener {
@@ -181,6 +193,26 @@ class EditTaskFragment : BaseFragment() {
             childFragmentManager,
             ChooseGroupBottomSheetFragment.TAG
         )
+    }
+
+    private fun showDateTimePickerDialog(task: Task) {
+        DateTimePickerDialogFragment.newInstance(task.dueDate, task.dueTime).show(
+            childFragmentManager,
+            DateTimePickerDialogFragment.TAG
+        )
+
+        childFragmentManager.setFragmentResultListener(
+            DateTimePickerDialogFragment.KEY_RESULT_FROM_DATETIME,
+            this
+        ) { _, bundle ->
+            date =
+                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialogFragment.KEY_DATE))
+            time =
+                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialogFragment.KEY_TIME))
+
+            editTaskViewModel.setDueDate(date)
+            editTaskViewModel.setDueTime(time)
+        }
     }
 
     private fun navigateUpToTasksFragment() {

@@ -11,11 +11,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mytodoapp.R
-import com.example.mytodoapp.abstracts.BaseFragment
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.components.abstracts.BaseFragment
+import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.FragmentTasksBinding
 import com.example.mytodoapp.features.task.createbottomsheet.CreateTaskBottomSheetFragment
-import com.example.mytodoapp.features.task.edit.EditTaskFragment.Companion.ARG_ALL_GROUPS
 import com.example.mytodoapp.features.task.group.GroupsViewModel
 import com.example.mytodoapp.features.task.group.createbottomsheet.CreateOrEditGroupBottomSheetFragment
 import com.example.mytodoapp.features.task.group.editbottomsheet.GroupEditActionsBottomSheetFragment

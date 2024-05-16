@@ -47,10 +47,11 @@
 
     <com.google.android.material.chip.Chip
         android:id="@+id/task_datetime_chip"
-        style="@style/Widget.Material3.Chip.Suggestion"
+        style="@style/Widget.Material3.Chip.Assist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
+        app:closeIconVisible="true"
         app:layout_constraintStart_toEndOf="@+id/task_ready_checkBox"
         app:layout_constraintTop_toBottomOf="@+id/task_details_textview"
         tools:text="today at 18:00" />

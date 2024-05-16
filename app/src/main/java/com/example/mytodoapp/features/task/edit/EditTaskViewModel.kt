@@ -2,9 +2,9 @@ package com.example.mytodoapp.features.task.edit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mytodoapp.database.entities.Task
-import com.example.mytodoapp.database.entities.TasksGroup
-import com.example.mytodoapp.database.repository.TaskRepository
+import com.example.mytodoapp.features.database.entities.Task
+import com.example.mytodoapp.features.database.entities.TasksGroup
+import com.example.mytodoapp.features.database.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,8 +57,12 @@ class EditTaskViewModel @Inject constructor(
         _task.update { it.copy(isFinished = isFinished) }
     }
 
-    fun setDueDate(dueDate: ZonedDateTime?) {
+    fun setDueDate(dueDate: LocalDate?) {
         _task.update { it.copy(dueDate = dueDate) }
+    }
+
+    fun setDueTime(dueTime: LocalTime?) {
+        _task.update { it.copy(dueTime = dueTime) }
     }
 
     fun update(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {

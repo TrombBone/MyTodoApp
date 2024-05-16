@@ -1,4 +1,4 @@
-package com.example.mytodoapp.extensions
+package com.example.mytodoapp.components.extensions
 
 import android.graphics.Color
 import android.graphics.Paint

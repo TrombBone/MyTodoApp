@@ -8,29 +8,34 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.mytodoapp.R
-import com.example.mytodoapp.abstracts.BaseFragment
-import com.example.mytodoapp.database.entities.Task
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.components.abstracts.BaseFragment
 import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
+import com.example.mytodoapp.features.database.converters.DateTimeConverter
+import com.example.mytodoapp.features.database.entities.Task
+import com.example.mytodoapp.features.database.entities.TasksGroup
+import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
 import com.example.mytodoapp.features.task.edit.EditTaskFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
+import java.time.LocalTime
 
 private const val ARG_POSITION = "ARG_POSITION"
 private const val ARG_ALL_GROUPS = "ARG_ALL_GROUPS"
 
 @AndroidEntryPoint
-class ItemTasksRecyclerPageFragment : BaseFragment(),
-    TaskAdapter.TaskStatusListener, TaskAdapter.OnTaskClickListener {
+class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusListener {
     private var position = 1
     private var groups: List<TasksGroup> = listOf(TasksGroup("1", "My Tasks"))
 
     private var _binding: ItemTasksRecyclerViewBinding? = null
-
     private val binding get() = _binding!!
 
     private val recyclerPageViewModel: RecyclerPageViewModel by viewModels()
 
-    private val taskAdapter = TaskAdapter(this, this)
+    private val taskAdapter = TaskAdapter(this)
+
+    private var date: LocalDate? = null
+    private var time: LocalTime? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,6 +104,26 @@ class ItemTasksRecyclerPageFragment : BaseFragment(),
                 )
             }
         )
+    }
+
+    override fun onDueDateTimeChipClick(task: Task) {
+        DateTimePickerDialogFragment.newInstance(task.dueDate, task.dueTime).show(
+            childFragmentManager,
+            DateTimePickerDialogFragment.TAG
+        )
+
+        childFragmentManager.setFragmentResultListener(
+            DateTimePickerDialogFragment.KEY_RESULT_FROM_DATETIME,
+            this
+        ) { _, bundle ->
+            date =
+                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialogFragment.KEY_DATE))
+            time =
+                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialogFragment.KEY_TIME))
+
+
+            onTaskUpdated(task.copy(dueDate = date, dueTime = time))
+        }
     }
 
     companion object {

@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
-import com.example.mytodoapp.abstracts.BaseBottomSheet
-import com.example.mytodoapp.database.entities.TasksGroup
+import com.example.mytodoapp.components.abstracts.BaseBottomSheet
+import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.BottomSheetCreateGroupBinding
 import com.example.mytodoapp.features.task.group.GroupsViewModel
 import dagger.hilt.android.AndroidEntryPoint

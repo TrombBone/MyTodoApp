@@ -6,12 +6,8 @@
     <string name="tasks_list_name">Задачи</string>
     <string name="and">&#160; и &#160;</string>
     <string name="yesterday">Вчера</string>
-    <string name="yesterday_at">Вчера на %1$s</string>
     <string name="today">Сегодня</string>
-    <string name="today_at">Сегодня на %1$s</string>
+    <string name="date_at_time">%1$s в %2$s</string>
+    <string name="date_and_time">%1$s, %2$s</string>
     <string name="tomorrow">Завтра</string>
-    <string name="tomorrow_at">Завтра на %1$s</string>
-    <string name="due_today_at">Due today at %1$s</string>
-    <string name="due_tomorrow_at">Due tomorrow at %1$s</string>
-    <string name="due_at">Due at %1$s</string>
 </resources>

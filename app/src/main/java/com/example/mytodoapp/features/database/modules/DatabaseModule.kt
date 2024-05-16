@@ -1,11 +1,11 @@
-package com.example.mytodoapp.database.provide
+package com.example.mytodoapp.features.database.modules
 
 import android.content.Context
 import androidx.room.Room
-import com.example.mytodoapp.database.AppDatabase
-import com.example.mytodoapp.database.AppDatabaseCallback
-import com.example.mytodoapp.database.dao.GroupDAO
-import com.example.mytodoapp.database.dao.TaskDAO
+import com.example.mytodoapp.features.database.AppDatabase
+import com.example.mytodoapp.features.database.AppDatabaseCallback
+import com.example.mytodoapp.features.database.dao.GroupDAO
+import com.example.mytodoapp.features.database.dao.TaskDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

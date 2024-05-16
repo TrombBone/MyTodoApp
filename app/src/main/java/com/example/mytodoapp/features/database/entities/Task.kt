@@ -1,4 +1,4 @@
-package com.example.mytodoapp.database.entities
+package com.example.mytodoapp.features.database.entities
 
 import android.content.Context
 import android.os.Build
@@ -11,14 +11,16 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.mytodoapp.R
-import com.example.mytodoapp.database.converters.DateTimeConverter
-import com.example.mytodoapp.extensions.isAfterNow
-import com.example.mytodoapp.extensions.isToday
-import com.example.mytodoapp.extensions.isTomorrow
-import com.example.mytodoapp.extensions.isYesterday
+import com.example.mytodoapp.components.extensions.isAfterToday
+import com.example.mytodoapp.components.extensions.isToday
+import com.example.mytodoapp.components.extensions.isTomorrow
+import com.example.mytodoapp.components.extensions.isYesterday
+import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
-import java.time.ZonedDateTime
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.UUID
 
 @Parcelize
@@ -42,44 +44,74 @@ data class Task @JvmOverloads constructor(
     var details: String? = null,
     var isStared: Boolean = false,
     @TypeConverters(DateTimeConverter::class)
-    var dueDate: ZonedDateTime? = null,
+    var dueDate: LocalDate? = null,
+    @TypeConverters(DateTimeConverter::class)
+    var dueTime: LocalTime? = null,
     var isFinished: Boolean = false,
     @TypeConverters(DateTimeConverter::class)
-    var dateAdded: ZonedDateTime? = ZonedDateTime.now() // need for sort by last added
+    var dateAdded: LocalDateTime? = LocalDateTime.now() // need for sort by last added
 ) : Parcelable {
 
     fun hasDetails(): Boolean = details != null
 
     fun hasDueDate(): Boolean = dueDate != null
 
-    fun isDueDateInFuture(): Boolean = dueDate?.isAfterNow() == true
+    fun hasDueTime(): Boolean = dueTime != null
 
-    fun isDueToday(): Boolean = dueDate?.isToday() == true
+    fun isDueDateInFuture(): Boolean = dueDate?.isAfterToday() ?: false
+
+    fun isDueToday(): Boolean = dueDate?.isToday() ?: false
+
+    /**
+     * Check if the task has due time
+     * and @return time in the required format
+     */
+    fun formatDueTime(context: Context): String {
+        return if (dueTime == null) ""
+        else dueTime!!.format(DateTimeConverter.getTimeFormatter(context))
+    }
 
     /**
      * Check if the day on the task's due
      * is today/yesterday/tomorrow
      * and @return needed string format
      */
-    fun formatDueDate(context: Context): String? {
+    private fun formatDueDate(context: Context): String {
         if (dueDate == null) return ""
 
-        return if (dueDate?.isToday() == true)
+        return if (dueDate!!.isToday())
+            String.format(context.getString(R.string.today))
+        else if (dueDate!!.isYesterday())
             String.format(
-                context.getString(R.string.today_at),
-                dueDate?.format(DateTimeConverter.getTimeFormatter(context))
+                context.getString(R.string.yesterday)
             )
-        else if (dueDate?.isYesterday() == true)
-            String.format(
-                context.getString(R.string.yesterday_at),
-                dueDate?.format(DateTimeConverter.getTimeFormatter(context))
-            )
-        else if (dueDate?.isTomorrow() == true)
-            String.format(
-                context.getString(R.string.tomorrow_at),
-                dueDate?.format(DateTimeConverter.getTimeFormatter(context))
-            )
-        else dueDate?.format(DateTimeConverter.getDateTimeFormatter(context))
+        else if (dueDate!!.isTomorrow())
+            String.format(context.getString(R.string.tomorrow))
+        else dueDate!!.format(DateTimeConverter.getDateFormatter())
+    }
+
+    /**
+     * Checks if the task has a dueDate and dueTime
+     * and @return them in the appropriate format
+     */
+    fun formatDueDateTime(context: Context): String {
+        if (dueDate == null) return ""
+        val dueDateString: String = formatDueDate(context)
+
+        val dueTimeString: String
+        if (dueTime == null) return dueDateString
+        else dueTimeString = formatDueTime(context)
+
+        return String.format(
+            context.getString(
+                if (dueDate!!.isToday() || dueDate!!.isYesterday() || dueDate!!.isTomorrow())
+                    R.string.date_at_time
+                else
+                    R.string.date_and_time
+            ),
+            dueDateString,
+            dueTimeString
+        )
     }
 
     companion object {
@@ -90,6 +122,7 @@ data class Task @JvmOverloads constructor(
         private const val EXTRA_DETAILS = "EXTRA_DETAILS"
         private const val EXTRA_IS_STARED = "EXTRA_IS_STARED"
         private const val EXTRA_DUE_DATE = "EXTRA_DUE_DATE"
+        private const val EXTRA_DUE_TIME = "EXTRA_DUE_TIME"
         private const val EXTRA_IS_FINISHED = "EXTRA_IS_FINISHED"
         private const val EXTRA_DATE_ADDED = "EXTRA_ADDED_DATE"
 
@@ -101,6 +134,7 @@ data class Task @JvmOverloads constructor(
                 EXTRA_DETAILS to task.details,
                 EXTRA_IS_STARED to task.isStared,
                 EXTRA_DUE_DATE to task.dueDate,
+                EXTRA_DUE_TIME to task.dueTime,
                 EXTRA_IS_FINISHED to task.isFinished,
                 EXTRA_DATE_ADDED to task.dateAdded
             )
@@ -117,9 +151,10 @@ data class Task @JvmOverloads constructor(
                         title = getString(EXTRA_TITLE),
                         details = getString(EXTRA_DETAILS),
                         isStared = getBoolean(EXTRA_IS_STARED),
-                        dueDate = getSerializable(EXTRA_DUE_DATE, ZonedDateTime::class.java),
+                        dueDate = getSerializable(EXTRA_DUE_DATE, LocalDate::class.java),
+                        dueTime = getSerializable(EXTRA_DUE_TIME, LocalTime::class.java),
                         isFinished = getBoolean(EXTRA_IS_FINISHED),
-                        dateAdded = getSerializable(EXTRA_DATE_ADDED, ZonedDateTime::class.java),
+                        dateAdded = getSerializable(EXTRA_DATE_ADDED, LocalDateTime::class.java),
                     )
                 } else {
                     Task(
@@ -128,9 +163,10 @@ data class Task @JvmOverloads constructor(
                         title = getString(EXTRA_TITLE),
                         details = getString(EXTRA_DETAILS),
                         isStared = getBoolean(EXTRA_IS_STARED),
-                        dueDate = getSerializable(EXTRA_DUE_DATE) as? ZonedDateTime,
+                        dueDate = getSerializable(EXTRA_DUE_DATE) as? LocalDate,
+                        dueTime = getSerializable(EXTRA_DUE_TIME) as? LocalTime,
                         isFinished = getBoolean(EXTRA_IS_FINISHED),
-                        dateAdded = getSerializable(EXTRA_DATE_ADDED) as ZonedDateTime,
+                        dateAdded = getSerializable(EXTRA_DATE_ADDED) as LocalDateTime,
                     )
                 }
             }

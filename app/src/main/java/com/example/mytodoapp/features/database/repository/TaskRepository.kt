@@ -1,14 +1,13 @@
-package com.example.mytodoapp.database.repository
+package com.example.mytodoapp.features.database.repository
 
 import android.content.Context
 import androidx.annotation.WorkerThread
-import com.example.mytodoapp.database.dao.TaskDAO
-import com.example.mytodoapp.database.entities.Task
+import com.example.mytodoapp.features.database.dao.TaskDAO
+import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.utils.MySharedPreferenceManager
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-
+import javax.inject.Inject
 
 class TaskRepository @Inject constructor(
     @ApplicationContext
@@ -23,10 +22,8 @@ class TaskRepository @Inject constructor(
 
     val allTasksCount: Flow<Int> = tasks.countAllTasks()
 
-    fun fetchTasksSelectedGroup(groupID: String): Flow<List<Task>> = tasks.fetchTasksSelectedGroup(groupID)
-
-    // FIXME: Do I really need it?
-    fun checkTitleUniqueness(title: String?, id: String?): Flow<List<String>> = tasks.checkTitleUniqueness(title, id)
+    fun fetchTasksSelectedGroup(groupID: String): Flow<List<Task>> =
+        tasks.fetchTasksSelectedGroup(groupID)
 
     // TODO in all functions:
     // TODO: use preference manager like as shared preferences
@@ -51,13 +48,4 @@ class TaskRepository @Inject constructor(
         tasks.update(task)
     }
 
-    suspend fun setFinished(taskID: String, status: Boolean) {
-        if (status)
-            tasks.setFinished(taskID, 1)
-        else tasks.setFinished(taskID, 0)
-    }
-
-    suspend fun setGroup(taskID: String, group: String) {
-        tasks.setGroup(taskID, group)
-    }
 }

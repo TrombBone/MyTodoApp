@@ -2,8 +2,9 @@ package com.example.mytodoapp.utils
 
 import android.content.Context
 import androidx.preference.PreferenceManager
-import com.example.mytodoapp.database.converters.DateTimeConverter
+import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZonedDateTime
 import javax.inject.Inject
@@ -41,15 +42,15 @@ class MySharedPreferenceManager @Inject constructor(
             }
         }
 
-    var previousBackupDate: ZonedDateTime?
-        get() = DateTimeConverter.toZonedDateTime(
+    var previousBackupDate: LocalDateTime?
+        get() = DateTimeConverter.toLocalDateTime(
             sharedPreference.getString(PREFERENCE_BACKUP, null)
         )
         set(value) {
             sharedPreference.edit().run {
                 putString(
                     PREFERENCE_BACKUP,
-                    DateTimeConverter.fromZonedDateTime(value)
+                    DateTimeConverter.fromLocalDateTime(value)
                 )
                 apply()
             }

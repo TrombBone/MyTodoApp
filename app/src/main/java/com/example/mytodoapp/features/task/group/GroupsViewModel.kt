@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.mytodoapp.database.entities.TasksGroup
-import com.example.mytodoapp.database.repository.GroupRepository
+import com.example.mytodoapp.features.database.entities.TasksGroup
+import com.example.mytodoapp.features.database.repository.GroupRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
