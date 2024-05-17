@@ -48,4 +48,9 @@ class TaskRepository @Inject constructor(
         tasks.update(task)
     }
 
+    @WorkerThread
+    suspend fun setFinished(taskID: String, isFinish: Boolean) {
+        if (isFinish) tasks.setFinished(taskID, 1)
+        else tasks.setFinished(taskID, 0)
+    }
 }

@@ -14,6 +14,7 @@ import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
+import com.example.mytodoapp.features.notifications.MyNotifications
 import com.example.mytodoapp.features.task.edit.EditTaskFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -90,6 +91,8 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
     }
 
     override fun onTaskUpdated(task: Task) {
+        // FIXME: temp
+        MyNotifications(requireContext()).showNotification(task)
         recyclerPageViewModel.update(task)
     }
 

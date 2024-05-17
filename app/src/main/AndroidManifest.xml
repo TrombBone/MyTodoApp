@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.mytodoapp">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".MyTodoApp"
         android:allowBackup="false"
@@ -23,6 +25,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- If this receiver listens for broadcasts sent from the system or from
+        other apps, even other apps that you own, set android:exported to "true". -->
+        <receiver
+            android:name=".features.broadcastreceiver.NotificationBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name=".features.broadcastreceiver.NotificationBroadcastReceiver.TAG_ACTION_FINISH" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

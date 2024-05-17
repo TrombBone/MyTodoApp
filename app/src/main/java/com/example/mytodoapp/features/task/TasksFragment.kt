@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mytodoapp.R
 import com.example.mytodoapp.components.abstracts.BaseFragment
-import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.FragmentTasksBinding
+import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.task.createbottomsheet.CreateTaskBottomSheetFragment
 import com.example.mytodoapp.features.task.group.GroupsViewModel
 import com.example.mytodoapp.features.task.group.createbottomsheet.CreateOrEditGroupBottomSheetFragment
