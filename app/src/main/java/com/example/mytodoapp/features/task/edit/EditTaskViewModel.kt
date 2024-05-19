@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.database.repository.TaskRepository
+import com.example.mytodoapp.features.notifications.NotificationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditTaskViewModel @Inject constructor(
     private val repository: TaskRepository,
+    private val notificationHelper: NotificationHelper,
 //    private val preferenceManager: MySharedPreferenceManager
 ) : ViewModel() {
 
@@ -73,4 +75,7 @@ class EditTaskViewModel @Inject constructor(
         repository.delete(task)
     }
 
+    fun dismissNotificationOnDeletedTask(task: Task) {
+        notificationHelper.dismissNotification(task.taskID)
+    }
 }
