@@ -1,9 +1,9 @@
-package com.example.mytodoapp.features.task.createbottomsheet
+package com.example.mytodoapp.features.task.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.features.database.entities.Task
-import com.example.mytodoapp.features.database.repository.TaskRepository
+import com.example.mytodoapp.features.database.repositories.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable

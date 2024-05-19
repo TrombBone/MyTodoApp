@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group.choosebottomsheet
+package com.example.mytodoapp.features.task.group.choose
 
 import android.view.LayoutInflater
 import android.view.View

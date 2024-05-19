@@ -14,10 +14,10 @@ import com.example.mytodoapp.R
 import com.example.mytodoapp.components.abstracts.BaseFragment
 import com.example.mytodoapp.databinding.FragmentTasksBinding
 import com.example.mytodoapp.features.database.entities.TasksGroup
-import com.example.mytodoapp.features.task.createbottomsheet.CreateTaskBottomSheetFragment
+import com.example.mytodoapp.features.task.create.CreateTaskBottomSheetFragment
 import com.example.mytodoapp.features.task.group.GroupsViewModel
-import com.example.mytodoapp.features.task.group.createbottomsheet.CreateOrEditGroupBottomSheetFragment
-import com.example.mytodoapp.features.task.group.editbottomsheet.GroupEditActionsBottomSheetFragment
+import com.example.mytodoapp.features.task.group.create.CreateOrEditGroupBottomSheetFragment
+import com.example.mytodoapp.features.task.group.edit.GroupEditActionsBottomSheetFragment
 import com.example.mytodoapp.features.task.viewpager.ItemTasksRecyclerPageFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

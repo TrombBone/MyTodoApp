@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.database.repository
+package com.example.mytodoapp.features.database.repositories
 
 import android.content.Context
 import androidx.annotation.WorkerThread

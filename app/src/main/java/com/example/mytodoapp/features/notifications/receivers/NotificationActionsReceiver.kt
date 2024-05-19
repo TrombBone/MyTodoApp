@@ -3,7 +3,7 @@ package com.example.mytodoapp.features.notifications.receivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.mytodoapp.features.database.repository.TaskRepository
+import com.example.mytodoapp.features.database.repositories.TaskRepository
 import com.example.mytodoapp.features.notifications.NotificationHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope

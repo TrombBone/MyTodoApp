@@ -19,7 +19,7 @@ import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
-import com.example.mytodoapp.features.task.group.choosebottomsheet.ChooseGroupBottomSheetFragment
+import com.example.mytodoapp.features.task.group.choose.ChooseGroupBottomSheetFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

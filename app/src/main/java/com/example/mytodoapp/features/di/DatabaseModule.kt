@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.database.modules
+package com.example.mytodoapp.features.di
 
 import android.content.Context
 import androidx.room.Room

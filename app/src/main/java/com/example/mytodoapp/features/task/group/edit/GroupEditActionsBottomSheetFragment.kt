@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group.editbottomsheet
+package com.example.mytodoapp.features.task.group.edit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.task.TasksViewModel
 import com.example.mytodoapp.features.task.group.GroupsViewModel
-import com.example.mytodoapp.features.task.group.createbottomsheet.CreateOrEditGroupBottomSheetFragment
+import com.example.mytodoapp.features.task.group.create.CreateOrEditGroupBottomSheetFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 

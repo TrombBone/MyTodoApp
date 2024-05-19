@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group.createbottomsheet
+package com.example.mytodoapp.features.task.group.create
 
 import android.os.Bundle
 import android.view.LayoutInflater
