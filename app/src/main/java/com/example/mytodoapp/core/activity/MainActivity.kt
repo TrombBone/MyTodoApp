@@ -1,17 +1,21 @@
 package com.example.mytodoapp.core.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.example.mytodoapp.R
 import com.example.mytodoapp.components.abstracts.BaseActivity
-import com.example.mytodoapp.features.notifications.MyNotifications
+import com.example.mytodoapp.features.notifications.NotificationHelper
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -21,16 +25,16 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         enableEdgeToEdge()
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
+        if (
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+            &&
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.SCHEDULE_EXACT_ALARM)
+            != PackageManager.PERMISSION_GRANTED
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) requestNotificationPermission()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) requestAlarmPermission()
         }
-
-        MyNotifications(this).setupRegularNotificationChannel()
-        MyNotifications(this).setupStaredNotificationChannel()
 
         // Retrieve NavController from the NavHostFragment
         val navHostFragment = supportFragmentManager
@@ -44,7 +48,14 @@ class MainActivity : BaseActivity() {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-            MyNotifications.NOTIFICATION_REQUEST_PERMISSION_CODE
+            NotificationHelper.NOTIFICATION_REQUEST_PERMISSION_CODE
+        )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun requestAlarmPermission() {
+        startActivity(
+            Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:$packageName"))
         )
     }
 

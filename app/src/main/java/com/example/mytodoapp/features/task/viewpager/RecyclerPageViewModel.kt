@@ -6,6 +6,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.repository.TaskRepository
+import com.example.mytodoapp.features.notifications.NotificationAlarmManager
+import com.example.mytodoapp.features.notifications.NotificationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -15,6 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RecyclerPageViewModel @Inject constructor(
     private val repository: TaskRepository,
+    private val notificationHelper: NotificationHelper,
+    private val notificationAlarmManager: NotificationAlarmManager
 //    private val preferenceManager: MySharedPreferenceManager
 ) : ViewModel() {
 
@@ -24,4 +28,12 @@ class RecyclerPageViewModel @Inject constructor(
         repository.update(task)
     }
 
+    fun setAlarmInFuture(task: Task) {
+        notificationAlarmManager.setAlarmInFuture(task)
+    }
+
+    fun dismissNotificationOnFinishedTask(task: Task) {
+        if (task.isFinished)
+            notificationHelper.dismissNotification(task.taskID)
+    }
 }

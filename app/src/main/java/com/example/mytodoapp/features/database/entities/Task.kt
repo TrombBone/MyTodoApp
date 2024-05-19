@@ -11,6 +11,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.example.mytodoapp.R
+import com.example.mytodoapp.components.extensions.isAfterNowMinuteInclude
 import com.example.mytodoapp.components.extensions.isAfterToday
 import com.example.mytodoapp.components.extensions.isToday
 import com.example.mytodoapp.components.extensions.isTomorrow
@@ -61,6 +62,11 @@ data class Task @JvmOverloads constructor(
     fun isDueDateInFuture(): Boolean = dueDate?.isAfterToday() ?: false
 
     fun isDueToday(): Boolean = dueDate?.isToday() ?: false
+
+    fun isDueTimeInLaterToday(): Boolean = dueTime?.isAfterNowMinuteInclude() ?: false
+
+    fun isDueInFuture(): Boolean =
+        isDueDateInFuture() || (isDueToday() && isDueTimeInLaterToday())
 
     /**
      * Check if the task has due time

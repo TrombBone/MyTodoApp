@@ -14,11 +14,12 @@ import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
-import com.example.mytodoapp.features.notifications.MyNotifications
+import com.example.mytodoapp.features.notifications.NotificationAlarmManager
 import com.example.mytodoapp.features.task.edit.EditTaskFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
+import javax.inject.Inject
 
 private const val ARG_POSITION = "ARG_POSITION"
 private const val ARG_ALL_GROUPS = "ARG_ALL_GROUPS"
@@ -81,6 +82,11 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
                         else -> list.filter { it.groupID == groups[position - 1].taskGroupID }
                     }
                 )
+
+                tasks.forEach { task ->
+                    recyclerPageViewModel.setAlarmInFuture(task)
+                    recyclerPageViewModel.dismissNotificationOnFinishedTask(task)
+                }
             }
         }
     }
@@ -91,8 +97,6 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
     }
 
     override fun onTaskUpdated(task: Task) {
-        // FIXME: temp
-        MyNotifications(requireContext()).showNotification(task)
         recyclerPageViewModel.update(task)
     }
 
@@ -123,7 +127,6 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
                 DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialogFragment.KEY_DATE))
             time =
                 DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialogFragment.KEY_TIME))
-
 
             onTaskUpdated(task.copy(dueDate = date, dueTime = time))
         }

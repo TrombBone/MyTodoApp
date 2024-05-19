@@ -16,28 +16,33 @@ import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
 import com.example.mytodoapp.R
 import com.example.mytodoapp.core.activity.MainActivity
-import com.example.mytodoapp.features.broadcastreceiver.NotificationBroadcastReceiver
-import com.example.mytodoapp.features.broadcastreceiver.NotificationBroadcastReceiver.Companion.KEY_EXTRA_NOTIFICATION_ID
-import com.example.mytodoapp.features.broadcastreceiver.NotificationBroadcastReceiver.Companion.TAG_ACTION_FINISH
+import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver.Companion.KEY_EXTRA_TASK_ID
+import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver.Companion.TAG_ACTION_FINISH
 import com.example.mytodoapp.features.database.entities.Task
+import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver
+import com.example.mytodoapp.utils.flagUpdateCurrent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.UUID
+import javax.inject.Inject
 
-class MyNotifications(private val context: Context) {
+class NotificationHelper @Inject constructor(
+    @ApplicationContext
+    private val context: Context
+) {
 
-    companion object {
-        const val NOTIFICATION_REQUEST_PERMISSION_CODE = 1
-
-        private const val STARED_CHANNEL_ID = "STARED_CHANNEL_ID"
-        private const val REGULAR_CHANNEL_ID = "REGULAR_CHANNEL_ID"
-
-        private const val REQUEST_CONTENT_CODE = 1
-    }
-
-    // Register the channel with the system.
-    private val notificationManager: NotificationManager =
+    private var notificationManager: NotificationManager =
         context.getSystemService() ?: throw IllegalStateException()
 
-    fun setupStaredNotificationChannel() {
+    init {
+        setupChannels()
+    }
+
+    private fun setupChannels() {
+        setupRegularNotificationChannel()
+        setupStaredNotificationChannel()
+    }
+
+    private fun setupStaredNotificationChannel() {
         if (notificationManager.getNotificationChannel(STARED_CHANNEL_ID) == null) {
             notificationManager.createNotificationChannel(
                 NotificationChannel(
@@ -54,7 +59,7 @@ class MyNotifications(private val context: Context) {
         }
     }
 
-    fun setupRegularNotificationChannel() {
+    private fun setupRegularNotificationChannel() {
         if (notificationManager.getNotificationChannel(REGULAR_CHANNEL_ID) == null) {
             notificationManager.createNotificationChannel(
                 NotificationChannel(
@@ -70,7 +75,7 @@ class MyNotifications(private val context: Context) {
         }
     }
 
-    private fun taskIDToNotificationID(taskID: String): Int =
+    private fun taskIDtoInt(taskID: String): Int =
         UUID.fromString(taskID).mostSignificantBits.toInt()
 
     private fun contentClickIntent(): PendingIntent {
@@ -91,28 +96,16 @@ class MyNotifications(private val context: Context) {
         ).build()
 
     private fun markTaskReadyIntent(task: Task): PendingIntent {
-        val markTaskReadyIntent = Intent(context, NotificationBroadcastReceiver::class.java).apply {
+        val markTaskReadyIntent = Intent(context, NotificationActionsReceiver::class.java).apply {
             action = TAG_ACTION_FINISH
-            putExtra(KEY_EXTRA_NOTIFICATION_ID, task.taskID)
+            putExtra(KEY_EXTRA_TASK_ID, task.taskID)
         }
         return PendingIntent.getBroadcast(
             context,
-            REQUEST_CONTENT_CODE,
+            taskIDtoInt(task.taskID),
             markTaskReadyIntent,
             flagUpdateCurrent(false)
         )
-    }
-
-    private fun flagUpdateCurrent(mutable: Boolean): Int {
-        return if (mutable) {
-            if (Build.VERSION.SDK_INT >= 31) {
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-            } else {
-                PendingIntent.FLAG_UPDATE_CURRENT
-            }
-        } else {
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        }
     }
 
     private fun createNotification(task: Task): NotificationCompat.Builder {
@@ -129,7 +122,6 @@ class MyNotifications(private val context: Context) {
             .setOngoing(task.isStared)
             .setContentIntent(contentClickIntent())
             .addAction(actionSetFinished(task))
-
     }
 
     @WorkerThread
@@ -156,20 +148,29 @@ class MyNotifications(private val context: Context) {
 
             val builder = createNotification(task)
             // notificationId is a unique int for each notification that you must define.
-            notify(taskIDToNotificationID(task.taskID), builder.build())
+            notify(taskIDtoInt(task.taskID), builder.build())
         }
     }
 
     fun dismissNotification(taskID: String) {
-        notificationManager.cancel(taskIDToNotificationID(taskID))
+        notificationManager.cancel(taskIDtoInt(taskID))
     }
 
-//    fun updateNotification(task: Task, isShowing: Boolean = true) {
-//        if (!isShowing) {
-//            showNotification(task)
-//        } else {
-//            dismissNotification(taskIDToNotificationID(task.taskID))
-//        }
-//    }
+  /*fun updateNotification(task: Task, isShowing: Boolean = true) {
+        if (!isShowing) {
+            showNotification(task)
+        } else {
+            dismissNotification(taskIDtoInt(task.taskID))
+        }
+    }*/
+
+    companion object {
+        const val NOTIFICATION_REQUEST_PERMISSION_CODE = 1
+
+        private const val STARED_CHANNEL_ID = "STARED_CHANNEL_ID"
+        private const val REGULAR_CHANNEL_ID = "REGULAR_CHANNEL_ID"
+
+        private const val REQUEST_CONTENT_CODE = 1
+    }
 }
 
