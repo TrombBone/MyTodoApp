@@ -14,12 +14,10 @@ import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
-import com.example.mytodoapp.features.notifications.NotificationAlarmManager
 import com.example.mytodoapp.features.task.edit.EditTaskFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
-import javax.inject.Inject
 
 private const val ARG_POSITION = "ARG_POSITION"
 private const val ARG_ALL_GROUPS = "ARG_ALL_GROUPS"
