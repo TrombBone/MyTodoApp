@@ -35,4 +35,6 @@ interface TaskDAO {
 //    @Query("SELECT * FROM tasks LEFT JOIN groups ON tasks.groupID == groups.taskGroupID ORDER BY dueDate ASC")
 //    fun fetchAllWithGroups(): Flow<List<Task>>
 
+    @Query("UPDATE tasks SET isFinished = :isFinished WHERE taskID = :taskId")
+    suspend fun setFinished(taskId: String, isFinished: Int)
 }

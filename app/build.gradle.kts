@@ -61,11 +61,11 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     // Fragments
-    implementation("androidx.fragment:fragment-ktx:1.7.0")
+    implementation("androidx.fragment:fragment-ktx:1.7.1")
 
     // ViewModel and LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
 
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.0")
@@ -79,7 +79,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     // Dependency Injection with Dagger Hilt
-    val hiltVersion = "2.48.1"
+    val hiltVersion = "2.51"
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     // kapt because ksp is alpha
     kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")

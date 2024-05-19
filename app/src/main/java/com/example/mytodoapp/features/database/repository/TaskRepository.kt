@@ -14,7 +14,7 @@ class TaskRepository @Inject constructor(
     private val context: Context,
     private val tasks: TaskDAO,
     private val preferenceManager: MySharedPreferenceManager,
-//    private val workManager: WorkManager,
+//    private val notificationAlarmManager: NotificationHelper,
 //    private val notificationManager: NotificationManager
 ) {
 
@@ -48,4 +48,9 @@ class TaskRepository @Inject constructor(
         tasks.update(task)
     }
 
+    @WorkerThread
+    suspend fun setFinished(taskID: String, isFinished: Boolean) {
+        if (isFinished) tasks.setFinished(taskID, 1)
+        else tasks.setFinished(taskID, 0)
+    }
 }

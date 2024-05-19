@@ -80,6 +80,11 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
                         else -> list.filter { it.groupID == groups[position - 1].taskGroupID }
                     }
                 )
+
+                tasks.forEach { task ->
+                    recyclerPageViewModel.setAlarmInFuture(task)
+                    recyclerPageViewModel.dismissNotificationOnFinishedTask(task)
+                }
             }
         }
     }
@@ -120,7 +125,6 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
                 DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialogFragment.KEY_DATE))
             time =
                 DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialogFragment.KEY_TIME))
-
 
             onTaskUpdated(task.copy(dueDate = date, dueTime = time))
         }

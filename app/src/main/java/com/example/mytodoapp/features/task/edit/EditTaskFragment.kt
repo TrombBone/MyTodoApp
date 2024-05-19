@@ -180,6 +180,7 @@ class EditTaskFragment : BaseFragment() {
             }
             .setPositiveButton(/*resources.getString(R.string.accept)*/"Accept") { dialog, _ ->
                 editTaskViewModel.delete(toDeleteTask)
+                editTaskViewModel.dismissNotificationOnDeletedTask(toDeleteTask)
                 navigateUpToTasksFragment()
                 dialog.dismiss()
             }
