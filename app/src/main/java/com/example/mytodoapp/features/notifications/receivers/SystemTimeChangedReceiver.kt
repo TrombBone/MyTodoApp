@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SetAlarmsBootReceiver : BroadcastReceiver() {
+class SystemTimeChangedReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var taskRepository: TaskRepository
@@ -22,7 +22,7 @@ class SetAlarmsBootReceiver : BroadcastReceiver() {
     lateinit var notificationAlarmManager: NotificationAlarmManager
 
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == "android.intent.action.BOOT_COMPLETED") {
+        if (intent.action == "android.intent.action.TIME_SET") {
             CoroutineScope(Dispatchers.IO + NonCancellable).launch {
                 taskRepository.allTasks.collect { tasks ->
                     tasks.forEach { task -> notificationAlarmManager.setAlarmInFuture(task) }
