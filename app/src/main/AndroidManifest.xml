@@ -44,11 +44,19 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".features.notifications.receivers.SetAlarmsBootReceiver"
+        <receiver android:name=".features.notifications.receivers.BootReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".features.notifications.receivers.SystemTimeChangedReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
 

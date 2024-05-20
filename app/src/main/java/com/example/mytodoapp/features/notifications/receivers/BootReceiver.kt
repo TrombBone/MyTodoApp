@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SetAlarmsBootReceiver : BroadcastReceiver() {
+class BootReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var taskRepository: TaskRepository
