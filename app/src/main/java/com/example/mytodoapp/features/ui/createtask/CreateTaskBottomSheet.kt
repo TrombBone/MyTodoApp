@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.create
+package com.example.mytodoapp.features.ui.createtask
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import com.example.mytodoapp.components.abstracts.BaseBottomSheet
 import com.example.mytodoapp.databinding.BottomSheetCreateTaskBinding
 import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
-import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
+import com.example.mytodoapp.features.ui.datetime.DateTimePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -23,13 +23,13 @@ import java.time.LocalTime
 private const val ARG_SELECTED_GROUP_ID = "ARG_SELECTED_GROUP_ID"
 
 @AndroidEntryPoint
-class CreateTaskBottomSheetFragment : BaseBottomSheet() {
+class CreateTaskBottomSheet : BaseBottomSheet() {
     private var selectedGroupID: String? = null
 
     private var _binding: BottomSheetCreateTaskBinding? = null
     private val binding get() = _binding!!
 
-    private val createTaskBottomSheetViewModel: CreateTaskBottomSheetViewModel by viewModels()
+    private val createTaskViewModel: CreateTaskViewModel by viewModels()
 
     private var date: LocalDate? = null
     private var time: LocalTime? = null
@@ -59,16 +59,16 @@ class CreateTaskBottomSheetFragment : BaseBottomSheet() {
 
             saveTaskButton.isEnabled = false
             addTaskTitleEditText.doOnTextChanged { text, _, _, _ ->
-                createTaskBottomSheetViewModel.setTitle(text?.toString())
+                createTaskViewModel.setTitle(text?.toString())
                 saveTaskButton.isEnabled = !(text?.trim().isNullOrEmpty())
             }
 
             addTaskDetailsEditText.doOnTextChanged { text, _, _, _ ->
-                createTaskBottomSheetViewModel.setDetails(text?.toString())
+                createTaskViewModel.setDetails(text?.toString())
             }
 
-            createTaskBottomSheetViewModel.setGroup(selectedGroupID ?: "1")
-            createTaskBottomSheetViewModel.setStared(setTaskStaredCheckBox.isChecked)
+            createTaskViewModel.setGroup(selectedGroupID ?: "1")
+            createTaskViewModel.setStared(setTaskStaredCheckBox.isChecked)
 
             showDetailsFieldButton.setOnClickListener {
                 addTaskDetailsEditText.isVisible = !addTaskDetailsEditText.isVisible
@@ -77,7 +77,7 @@ class CreateTaskBottomSheetFragment : BaseBottomSheet() {
 
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                createTaskBottomSheetViewModel.task.collect { task ->
+                createTaskViewModel.task.collect { task ->
 
                     with(binding.setDatetimeButton) {
                         text = task.formatDueDateTime(requireContext())
@@ -85,8 +85,8 @@ class CreateTaskBottomSheetFragment : BaseBottomSheet() {
                     }
 
                     binding.saveTaskButton.setOnClickListener {
-                        createTaskBottomSheetViewModel.insert(task)
-                        this@CreateTaskBottomSheetFragment.dismiss()
+                        createTaskViewModel.insert(task)
+                        this@CreateTaskBottomSheet.dismiss()
                     }
                 }
             }
@@ -96,22 +96,22 @@ class CreateTaskBottomSheetFragment : BaseBottomSheet() {
     }
 
     private fun showDateTimePickerDialog(task: Task) {
-        DateTimePickerDialogFragment.newInstance(task.dueDate, task.dueTime).show(
+        DateTimePickerDialog.newInstance(task.dueDate, task.dueTime).show(
             childFragmentManager,
-            DateTimePickerDialogFragment.TAG
+            DateTimePickerDialog.TAG
         )
 
         childFragmentManager.setFragmentResultListener(
-            DateTimePickerDialogFragment.KEY_RESULT_FROM_DATETIME,
+            DateTimePickerDialog.KEY_RESULT_FROM_DATETIME,
             this
         ) { _, bundle ->
             date =
-                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialogFragment.KEY_DATE))
+                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialog.KEY_DATE))
             time =
-                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialogFragment.KEY_TIME))
+                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialog.KEY_TIME))
 
-            createTaskBottomSheetViewModel.setDueDate(date)
-            createTaskBottomSheetViewModel.setDueTime(time)
+            createTaskViewModel.setDueDate(date)
+            createTaskViewModel.setDueTime(time)
         }
     }
 
@@ -125,7 +125,7 @@ class CreateTaskBottomSheetFragment : BaseBottomSheet() {
 
         @JvmStatic
         fun newInstance(selectedGroupID: String) =
-            CreateTaskBottomSheetFragment().apply {
+            CreateTaskBottomSheet().apply {
                 arguments = Bundle().apply {
                     putString(ARG_SELECTED_GROUP_ID, selectedGroupID)
                 }

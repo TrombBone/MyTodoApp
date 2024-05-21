@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group.choose
+package com.example.mytodoapp.features.ui.edittask.choosegroup
 
 import android.view.LayoutInflater
 import android.view.View

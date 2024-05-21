@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.viewpager
+package com.example.mytodoapp.features.ui.page
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

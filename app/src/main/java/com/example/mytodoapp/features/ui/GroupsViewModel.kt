@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group
+package com.example.mytodoapp.features.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

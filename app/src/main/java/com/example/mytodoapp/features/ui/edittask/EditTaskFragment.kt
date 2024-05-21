@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.edit
+package com.example.mytodoapp.features.ui.edittask
 
 import android.os.Build
 import android.os.Bundle
@@ -18,8 +18,8 @@ import com.example.mytodoapp.databinding.FragmentEditTaskBinding
 import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
-import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
-import com.example.mytodoapp.features.task.group.choose.ChooseGroupBottomSheetFragment
+import com.example.mytodoapp.features.ui.datetime.DateTimePickerDialog
+import com.example.mytodoapp.features.ui.edittask.choosegroup.ChooseGroupBottomSheet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -189,27 +189,27 @@ class EditTaskFragment : BaseFragment() {
 
     private fun showChooseGroupBottomSheet() {
         val chooseGroupBottomSheet =
-            ChooseGroupBottomSheetFragment.newInstance()
+            ChooseGroupBottomSheet.newInstance()
         chooseGroupBottomSheet.show(
             childFragmentManager,
-            ChooseGroupBottomSheetFragment.TAG
+            ChooseGroupBottomSheet.TAG
         )
     }
 
     private fun showDateTimePickerDialog(task: Task) {
-        DateTimePickerDialogFragment.newInstance(task.dueDate, task.dueTime).show(
+        DateTimePickerDialog.newInstance(task.dueDate, task.dueTime).show(
             childFragmentManager,
-            DateTimePickerDialogFragment.TAG
+            DateTimePickerDialog.TAG
         )
 
         childFragmentManager.setFragmentResultListener(
-            DateTimePickerDialogFragment.KEY_RESULT_FROM_DATETIME,
+            DateTimePickerDialog.KEY_RESULT_FROM_DATETIME,
             this
         ) { _, bundle ->
             date =
-                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialogFragment.KEY_DATE))
+                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialog.KEY_DATE))
             time =
-                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialogFragment.KEY_TIME))
+                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialog.KEY_TIME))
 
             editTaskViewModel.setDueDate(date)
             editTaskViewModel.setDueTime(time)

@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.edit
+package com.example.mytodoapp.features.ui.edittask
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.viewpager
+package com.example.mytodoapp.features.ui.page
 
 import android.os.Build
 import android.os.Bundle
@@ -13,8 +13,8 @@ import com.example.mytodoapp.databinding.ItemTasksRecyclerViewBinding
 import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
-import com.example.mytodoapp.features.datetime.DateTimePickerDialogFragment
-import com.example.mytodoapp.features.task.edit.EditTaskFragment
+import com.example.mytodoapp.features.ui.datetime.DateTimePickerDialog
+import com.example.mytodoapp.features.ui.edittask.EditTaskFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
@@ -23,7 +23,7 @@ private const val ARG_POSITION = "ARG_POSITION"
 private const val ARG_ALL_GROUPS = "ARG_ALL_GROUPS"
 
 @AndroidEntryPoint
-class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusListener {
+class RecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusListener {
     private var position = 1
     private var groups: List<TasksGroup> = listOf(TasksGroup("1", "My Tasks"))
 
@@ -113,19 +113,19 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
     }
 
     override fun onDueDateTimeChipClick(task: Task) {
-        DateTimePickerDialogFragment.newInstance(task.dueDate, task.dueTime).show(
+        DateTimePickerDialog.newInstance(task.dueDate, task.dueTime).show(
             childFragmentManager,
-            DateTimePickerDialogFragment.TAG
+            DateTimePickerDialog.TAG
         )
 
         childFragmentManager.setFragmentResultListener(
-            DateTimePickerDialogFragment.KEY_RESULT_FROM_DATETIME,
+            DateTimePickerDialog.KEY_RESULT_FROM_DATETIME,
             this
         ) { _, bundle ->
             date =
-                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialogFragment.KEY_DATE))
+                DateTimeConverter.toLocalDate(bundle.getString(DateTimePickerDialog.KEY_DATE))
             time =
-                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialogFragment.KEY_TIME))
+                DateTimeConverter.toLocalTime(bundle.getString(DateTimePickerDialog.KEY_TIME))
 
             onTaskUpdated(task.copy(dueDate = date, dueTime = time))
         }
@@ -134,7 +134,7 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
     companion object {
         @JvmStatic
         fun newInstance(position: Int, allGroups: List<TasksGroup>) =
-            ItemTasksRecyclerPageFragment().apply {
+            RecyclerPageFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_POSITION, position)
                     putParcelableArrayList(ARG_ALL_GROUPS, ArrayList<TasksGroup>(allGroups))

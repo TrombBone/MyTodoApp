@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.create
+package com.example.mytodoapp.features.ui.createtask
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,7 +17,7 @@ import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateTaskBottomSheetViewModel @Inject constructor(
+class CreateTaskViewModel @Inject constructor(
     private val repository: TaskRepository,
 //    private val preferenceManager: MySharedPreferenceManager
 ) : ViewModel() {

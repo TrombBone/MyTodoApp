@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.viewpager
+package com.example.mytodoapp.features.ui.page
 
 import android.view.LayoutInflater
 import android.view.View

@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.datetime
+package com.example.mytodoapp.features.ui.datetime
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -23,7 +23,7 @@ private const val TAG_TIME_PICKER = "TAG_TIME_PICKER"
 private const val ARG_DATE = "ARG_DATE"
 private const val ARG_TIME = "ARG_TIME"
 
-class DateTimePickerDialogFragment : DialogFragment() {
+class DateTimePickerDialog : DialogFragment() {
     private var date: LocalDate? = null
     private var time: LocalTime? = null
 
@@ -144,7 +144,7 @@ class DateTimePickerDialogFragment : DialogFragment() {
 
         @JvmStatic
         fun newInstance(date: LocalDate?, time: LocalTime?) =
-            DateTimePickerDialogFragment().apply {
+            DateTimePickerDialog().apply {
                 arguments = Bundle().apply {
                     putString(ARG_DATE, DateTimeConverter.fromLocalDate(date))
                     putString(ARG_TIME, DateTimeConverter.fromLocalTime(time))

@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group.choose
+package com.example.mytodoapp.features.ui.edittask.choosegroup
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,12 +11,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.mytodoapp.components.abstracts.BaseBottomSheet
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.BottomSheetChooseGroupBinding
-import com.example.mytodoapp.features.task.edit.EditTaskViewModel
+import com.example.mytodoapp.features.ui.edittask.EditTaskViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ChooseGroupBottomSheetFragment : BaseBottomSheet(), GroupAdapter.OnGroupClickListener {
+class ChooseGroupBottomSheet : BaseBottomSheet(), GroupAdapter.OnGroupClickListener {
 
     private var _binding: BottomSheetChooseGroupBinding? = null
     private val binding get() = _binding!!
@@ -53,7 +53,7 @@ class ChooseGroupBottomSheetFragment : BaseBottomSheet(), GroupAdapter.OnGroupCl
                 editTaskViewModel.task.collect { task ->
                     groupsAdapter = GroupAdapter(
                         taskGroups.find { it.taskGroupID == task.groupID },
-                        this@ChooseGroupBottomSheetFragment
+                        this@ChooseGroupBottomSheet
                     )
 
                     groupsAdapter.setHasStableIds(true)
@@ -78,6 +78,6 @@ class ChooseGroupBottomSheetFragment : BaseBottomSheet(), GroupAdapter.OnGroupCl
         val TAG: String = this::class.java.name
 
         @JvmStatic
-        fun newInstance() = ChooseGroupBottomSheetFragment()
+        fun newInstance() = ChooseGroupBottomSheet()
     }
 }

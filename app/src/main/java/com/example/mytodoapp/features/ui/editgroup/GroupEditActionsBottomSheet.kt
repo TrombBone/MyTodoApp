@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group.edit
+package com.example.mytodoapp.features.ui.editgroup
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,24 +9,21 @@ import com.example.mytodoapp.components.abstracts.BaseBottomSheet
 import com.example.mytodoapp.databinding.BottomSheetGroupEditActionsBinding
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.database.entities.TasksGroup
-import com.example.mytodoapp.features.task.TasksViewModel
-import com.example.mytodoapp.features.task.group.GroupsViewModel
-import com.example.mytodoapp.features.task.group.create.CreateOrEditGroupBottomSheetFragment
+import com.example.mytodoapp.features.ui.creategroup.CreateOrEditGroupBottomSheet
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val ARG_SELECTED_GROUP_ID = "ARG_SELECTED_GROUP_ID"
 
 @AndroidEntryPoint
-class GroupEditActionsBottomSheetFragment : BaseBottomSheet() {
+class GroupEditActionsBottomSheet : BaseBottomSheet() {
     private var selectedGroupID: String? = null
 
     private var _binding: BottomSheetGroupEditActionsBinding? = null
     private val binding get() = _binding!!
 
-    private val groupsViewModel: GroupsViewModel by viewModels()
+    private val deleteGroupViewModel: EditGroupViewModel by viewModels()
 
-    private val tasksViewModel: TasksViewModel by viewModels()
     private var tasksSelectedGroup = listOf<Task>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,20 +49,20 @@ class GroupEditActionsBottomSheetFragment : BaseBottomSheet() {
             selectedGroupID?.let { id ->
                 editGroupTitleButton.setOnClickListener {
                     showEditGroupTitleBottomSheet(id)
-                    this@GroupEditActionsBottomSheetFragment.dismiss()
+                    this@GroupEditActionsBottomSheet.dismiss()
                 }
 
                 deleteGroupButton.setOnClickListener {
-                    groupsViewModel.allGroups.observe(this@GroupEditActionsBottomSheetFragment) { groups ->
+                    deleteGroupViewModel.allGroups.observe(this@GroupEditActionsBottomSheet) { groups ->
                         groups.find { it.taskGroupID == id }
                             ?.let(::showConfirmDeleteDialog)
                         // TODO: if null - show toast "Current group doesn't exist anymore"
                     }
-                    this@GroupEditActionsBottomSheetFragment.dismiss()
+                    this@GroupEditActionsBottomSheet.dismiss()
                 }
 
-                tasksViewModel.tasksSelectedGroup(id)
-                    .observe(this@GroupEditActionsBottomSheetFragment) { tasks ->
+                deleteGroupViewModel.tasksSelectedGroup(id)
+                    .observe(this@GroupEditActionsBottomSheet) { tasks ->
                         tasksSelectedGroup = tasks
                     }
             } // TODO: if null - show toast "Current group doesn't exist anymore"
@@ -75,10 +72,10 @@ class GroupEditActionsBottomSheetFragment : BaseBottomSheet() {
 
     private fun showEditGroupTitleBottomSheet(selectedGroupID: String) {
         val editGroupModalBottomSheet =
-            CreateOrEditGroupBottomSheetFragment.newEditInstance(selectedGroupID)
+            CreateOrEditGroupBottomSheet.newEditInstance(selectedGroupID)
         editGroupModalBottomSheet.show(
             parentFragmentManager,
-            CreateOrEditGroupBottomSheetFragment.TAG
+            CreateOrEditGroupBottomSheet.TAG
         )
     }
 
@@ -91,9 +88,9 @@ class GroupEditActionsBottomSheetFragment : BaseBottomSheet() {
             }
             .setPositiveButton(/*resources.getString(R.string.accept)*/"Accept") { dialog, _ ->
                 tasksSelectedGroup.forEach {
-                    tasksViewModel.update(it.copy(groupID = "1"))
+                    deleteGroupViewModel.updateTaskGroupID(it.copy(groupID = "1"))
                 }
-                groupsViewModel.delete(toDeleteGroup)
+                deleteGroupViewModel.deleteGroup(toDeleteGroup)
                 dialog.dismiss()
             }
             .show()
@@ -103,7 +100,7 @@ class GroupEditActionsBottomSheetFragment : BaseBottomSheet() {
 
         @JvmStatic
         fun newInstance(selectedGroupID: String) =
-            GroupEditActionsBottomSheetFragment().apply {
+            GroupEditActionsBottomSheet().apply {
                 arguments = Bundle().apply {
                     putString(ARG_SELECTED_GROUP_ID, selectedGroupID)
                 }

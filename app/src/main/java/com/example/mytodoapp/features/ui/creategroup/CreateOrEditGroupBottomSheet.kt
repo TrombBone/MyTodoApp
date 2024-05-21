@@ -1,4 +1,4 @@
-package com.example.mytodoapp.features.task.group.create
+package com.example.mytodoapp.features.ui.creategroup
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,13 +9,13 @@ import androidx.fragment.app.viewModels
 import com.example.mytodoapp.components.abstracts.BaseBottomSheet
 import com.example.mytodoapp.databinding.BottomSheetCreateGroupBinding
 import com.example.mytodoapp.features.database.entities.TasksGroup
-import com.example.mytodoapp.features.task.group.GroupsViewModel
+import com.example.mytodoapp.features.ui.GroupsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 private const val ARG_SELECTED_GROUP_ID = "ARG_SELECTED_GROUP_ID"
 
 @AndroidEntryPoint
-class CreateOrEditGroupBottomSheetFragment : BaseBottomSheet() {
+class CreateOrEditGroupBottomSheet : BaseBottomSheet() {
     private var selectedGroupID: String? = null
     private var isEditInsteadCreate: Boolean = false
 
@@ -46,36 +46,34 @@ class CreateOrEditGroupBottomSheetFragment : BaseBottomSheet() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding) {
-            groupsViewModel.allGroups.observe(viewLifecycleOwner) { groups ->
-                addGroupTitleTextInputEditText.requestFocus()
+            addGroupTitleTextInputEditText.requestFocus()
 
-                saveGroupButton.isEnabled = false
-                addGroupTitleTextInputEditText.doOnTextChanged { text, _, _, _ ->
-                    saveGroupButton.isEnabled = !(text?.trim().isNullOrEmpty())
-                }
+            saveGroupButton.isEnabled = false
+            addGroupTitleTextInputEditText.doOnTextChanged { text, _, _, _ ->
+                saveGroupButton.isEnabled = !(text?.trim().isNullOrEmpty())
+            }
 
-                if (isEditInsteadCreate) {
+            if (isEditInsteadCreate) {
+                groupsViewModel.allGroups.observe(viewLifecycleOwner) { groups ->
                     val selectedGroup = groups.find { it.taskGroupID == selectedGroupID }
                     addGroupTitleTextInputEditText.setText(selectedGroup?.groupTitle ?: "")
                 }
+            }
 
-                saveGroupButton.setOnClickListener {
-                    val groupTitle =
-                        if (addGroupTitleTextInputEditText.text?.trim().isNullOrEmpty()) null
-                        else addGroupTitleTextInputEditText.text!!.trim().toString()
-                    if (isEditInsteadCreate) {
-                        groupsViewModel.update(
-                            TasksGroup(
-                                taskGroupID = selectedGroupID!!,
-                                groupTitle = groupTitle
-                            )
-                        )
-                    } else {
-                        groupsViewModel.insert(TasksGroup(groupTitle = groupTitle))
-                    }
+            saveGroupButton.setOnClickListener {
+                val groupTitle =
+                    if (addGroupTitleTextInputEditText.text?.trim().isNullOrEmpty()) null
+                    else addGroupTitleTextInputEditText.text!!.trim().toString()
 
-                    this@CreateOrEditGroupBottomSheetFragment.dismiss()
-                }
+                if (isEditInsteadCreate) groupsViewModel.update(
+                    TasksGroup(
+                        taskGroupID = selectedGroupID!!,
+                        groupTitle = groupTitle
+                    )
+                )
+                else groupsViewModel.insert(TasksGroup(groupTitle = groupTitle))
+
+                this@CreateOrEditGroupBottomSheet.dismiss()
             }
         }
     }
@@ -89,11 +87,11 @@ class CreateOrEditGroupBottomSheetFragment : BaseBottomSheet() {
         val TAG: String = this::class.java.name
 
         @JvmStatic
-        fun newCreateInstance() = CreateOrEditGroupBottomSheetFragment()
+        fun newCreateInstance() = CreateOrEditGroupBottomSheet()
 
         @JvmStatic
         fun newEditInstance(selectedGroupID: String) =
-            CreateOrEditGroupBottomSheetFragment().apply {
+            CreateOrEditGroupBottomSheet().apply {
                 arguments = Bundle().apply {
                     putString(ARG_SELECTED_GROUP_ID, selectedGroupID)
                 }

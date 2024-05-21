@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/tasks_fragment"
-        android:name="com.example.mytodoapp.features.task.TasksFragment"
+        android:name="com.example.mytodoapp.features.ui.AllPagesFragment"
         tools:layout="@layout/fragment_tasks">
 
         <action
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/edit_task_fragment"
-        android:name="com.example.mytodoapp.features.task.edit.EditTaskFragment"
+        android:name="com.example.mytodoapp.features.ui.edittask.EditTaskFragment"
         tools:layout="@layout/fragment_edit_task">
 
         <action
