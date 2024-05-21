@@ -43,7 +43,8 @@ class DateTimePickerDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = requireActivity().layoutInflater;
+        val inflater = requireActivity().layoutInflater
+
         _binding = DialogDateTimePickerBinding.inflate(inflater)
 
         val calendar = Calendar.getInstance()
@@ -92,7 +93,7 @@ class DateTimePickerDialog : DialogFragment() {
     }
 
     private fun showMaterialTimePicker(localTime: LocalTime?, calendar: Calendar) {
-        var hour = localTime?.hour ?: calendar[Calendar.HOUR_OF_DAY + 1]
+        var hour = localTime?.hour ?: (LocalTime.now().hour + 1)
         var minute = localTime?.minute ?: 0
 
         val picker =
