@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.example.mytodoapp.features.database.entities.Task
-import com.example.mytodoapp.features.notifications.NotificationAlarmManager
 import com.example.mytodoapp.features.notifications.NotificationHelper
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -17,9 +16,6 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
 
     @Inject
     lateinit var notificationHelper: NotificationHelper
-
-    @Inject
-    lateinit var notificationAlarmManager: NotificationAlarmManager
 
     override fun onReceive(context: Context, intent: Intent) {
         var currentTask: Task? = null
