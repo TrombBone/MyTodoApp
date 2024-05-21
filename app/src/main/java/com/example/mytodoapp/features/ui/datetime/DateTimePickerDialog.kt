@@ -59,7 +59,7 @@ class DateTimePickerDialog : DialogFragment() {
 
         with(binding.setTimeButton) {
             updateSetTimeButtonText(this, time)
-            setOnClickListener { showMaterialTimePicker(time, calendar) }
+            setOnClickListener { showMaterialTimePicker(time) }
         }
 
         return MaterialAlertDialogBuilder(requireContext()).apply {
@@ -92,7 +92,7 @@ class DateTimePickerDialog : DialogFragment() {
         )
     }
 
-    private fun showMaterialTimePicker(localTime: LocalTime?, calendar: Calendar) {
+    private fun showMaterialTimePicker(localTime: LocalTime?) {
         var hour = localTime?.hour ?: (LocalTime.now().hour + 1)
         var minute = localTime?.minute ?: 0
 
