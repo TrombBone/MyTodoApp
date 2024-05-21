@@ -73,11 +73,12 @@ class ItemTasksRecyclerPageFragment : BaseFragment(), TaskAdapter.TaskStatusList
 
         recyclerPageViewModel.tasks.observe(viewLifecycleOwner) { tasks ->
             tasks?.let { list ->
+                val sortedList = list.sortedBy { it.isFinished }
                 taskAdapter.submitList(
                     when (position) {
-                        0 -> list.filter { it.isStared }
-                        1 -> list
-                        else -> list.filter { it.groupID == groups[position - 1].taskGroupID }
+                        0 -> sortedList.filter { it.isStared }
+                        1 -> sortedList
+                        else -> sortedList.filter { it.groupID == groups[position - 1].taskGroupID }
                     }
                 )
 

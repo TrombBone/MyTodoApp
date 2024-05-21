@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import com.example.mytodoapp.components.abstracts.BaseBottomSheet
-import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.databinding.BottomSheetCreateGroupBinding
+import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.task.group.GroupsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.UUID
 
 private const val ARG_SELECTED_GROUP_ID = "ARG_SELECTED_GROUP_ID"
 
@@ -61,19 +60,19 @@ class CreateOrEditGroupBottomSheetFragment : BaseBottomSheet() {
                 }
 
                 saveGroupButton.setOnClickListener {
-                    val group = TasksGroup(
-                        taskGroupID =
-                        if (isEditInsteadCreate) selectedGroupID!!
-                        else UUID.randomUUID().toString(),
-                        groupTitle =
+                    val groupTitle =
                         if (addGroupTitleTextInputEditText.text?.trim().isNullOrEmpty()) null
                         else addGroupTitleTextInputEditText.text!!.trim().toString()
-                    )
-
-                    if (isEditInsteadCreate)
-                        groupsViewModel.update(group)
-                    else
-                        groupsViewModel.insert(group)
+                    if (isEditInsteadCreate) {
+                        groupsViewModel.update(
+                            TasksGroup(
+                                taskGroupID = selectedGroupID!!,
+                                groupTitle = groupTitle
+                            )
+                        )
+                    } else {
+                        groupsViewModel.insert(TasksGroup(groupTitle = groupTitle))
+                    }
 
                     this@CreateOrEditGroupBottomSheetFragment.dismiss()
                 }
