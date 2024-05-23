@@ -17,7 +17,6 @@ import com.example.mytodoapp.components.extensions.isToday
 import com.example.mytodoapp.components.extensions.isTomorrow
 import com.example.mytodoapp.components.extensions.isYesterday
 import com.example.mytodoapp.features.database.converters.DateTimeConverter
-import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -25,7 +24,6 @@ import java.time.LocalTime
 import java.util.UUID
 
 @Parcelize
-@JsonClass(generateAdapter = true)
 @Entity(
     tableName = "tasks",
     foreignKeys = [
@@ -180,5 +178,4 @@ data class Task @JvmOverloads constructor(
         }
     }
 
-    //TODO: mb need the same functions for JSON
 }
