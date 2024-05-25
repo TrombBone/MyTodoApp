@@ -15,7 +15,6 @@ import com.example.mytodoapp.components.abstracts.BaseActivity
 import com.example.mytodoapp.features.notifications.NotificationHelper
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
@@ -63,7 +62,7 @@ class MainActivity : BaseActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //
+        // TODO: Receive if permissions not granted
     }
 
     /**

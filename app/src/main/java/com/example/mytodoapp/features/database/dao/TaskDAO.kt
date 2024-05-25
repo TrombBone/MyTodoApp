@@ -26,9 +26,6 @@ interface TaskDAO {
     @Query("SELECT * FROM tasks ORDER BY dueDate, dueTime ASC")
     fun fetchAllTasks(): Flow<List<Task>>
 
-    @Query("SELECT COUNT(*) FROM tasks")
-    fun countAllTasks(): Flow<Int>
-
     @Query("DELETE FROM tasks")
     suspend fun deleteAll()
 
@@ -36,5 +33,5 @@ interface TaskDAO {
 //    fun fetchAllWithGroups(): Flow<List<Task>>
 
     @Query("UPDATE tasks SET isFinished = :isFinished WHERE taskID = :taskId")
-    suspend fun setFinished(taskId: String, isFinished: Int)
+    suspend fun setFinished(taskId: String, isFinished: Boolean)
 }

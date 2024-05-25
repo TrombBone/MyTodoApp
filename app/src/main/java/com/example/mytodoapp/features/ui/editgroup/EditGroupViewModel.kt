@@ -20,7 +20,7 @@ class EditGroupViewModel @Inject constructor(
     private val groupRepository: GroupRepository
 ) : ViewModel() {
 
-    val allGroups: LiveData<List<TasksGroup>> = groupRepository.allGroups.asLiveData()
+    val allGroups: LiveData<List<TasksGroup>> = groupRepository.allItems.asLiveData()
 
     fun deleteGroup(group: TasksGroup) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
         groupRepository.delete(group)

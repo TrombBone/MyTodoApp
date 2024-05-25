@@ -1,17 +1,18 @@
 package com.example.mytodoapp.features.database.repositories
 
 import androidx.annotation.WorkerThread
+import com.example.mytodoapp.components.interfaces.BaseRepository
 import com.example.mytodoapp.features.database.dao.TaskDAO
 import com.example.mytodoapp.features.database.entities.Task
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TaskRepository @Inject constructor(
+open class TaskRepository @Inject constructor(
     private val tasks: TaskDAO,
 //    private val preferenceManager: MySharedPreferenceManager
-) {
+) : BaseRepository<Task> {
 
-    val allTasks: Flow<List<Task>> = tasks.fetchAllTasks()
+    override val allItems: Flow<List<Task>> = tasks.fetchAllTasks()
 
     fun fetchTasksSelectedGroup(groupID: String): Flow<List<Task>> =
         tasks.fetchTasksSelectedGroup(groupID)
@@ -20,23 +21,22 @@ class TaskRepository @Inject constructor(
     // implement anything else to ensure we're not doing long running database work
     // off the main thread.
     @WorkerThread
-    suspend fun insert(task: Task) {
-        tasks.insert(task)
+    override suspend fun insert(item: Task) {
+        tasks.insert(item)
     }
 
     @WorkerThread
-    suspend fun delete(task: Task) {
-        tasks.delete(task)
+    override suspend fun delete(item: Task) {
+        tasks.delete(item)
     }
 
     @WorkerThread
-    suspend fun update(task: Task) {
-        tasks.update(task)
+    override suspend fun update(item: Task) {
+        tasks.update(item)
     }
 
     @WorkerThread
     suspend fun setFinished(taskID: String, isFinished: Boolean) {
-        if (isFinished) tasks.setFinished(taskID, 1)
-        else tasks.setFinished(taskID, 0)
+        tasks.setFinished(taskID, isFinished)
     }
 }

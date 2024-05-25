@@ -18,7 +18,7 @@ class GroupsViewModel @Inject constructor(
 //    private val preferenceManager: MySharedPreferenceManager
 ) : ViewModel() {
 
-    val allGroups: LiveData<List<TasksGroup>> = repository.allGroups.asLiveData()
+    val allGroups: LiveData<List<TasksGroup>> = repository.allItems.asLiveData()
 
     fun insert(group: TasksGroup) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
         repository.insert(group)

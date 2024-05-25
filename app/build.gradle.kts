@@ -18,7 +18,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.mytodoapp.testhelpers.hilt.HiltTestRunner"
     }
 
     buildTypes {
@@ -61,7 +61,8 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     // Fragments
-    implementation("androidx.fragment:fragment-ktx:1.7.1")
+    val fragmentVersion = "1.7.1"
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
 
     // ViewModel and LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
@@ -92,10 +93,35 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$roomVersion")
 
-    //Base tests
+    // Tests
+
+    // Base tests
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    //// Core library
+    androidTestImplementation("androidx.test:core-ktx:1.5.0")
+    //// AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    androidTestImplementation("androidx.test:rules:1.5.0")
+    //// Assertions
+    androidTestImplementation("androidx.test.ext:junit-ktx:1.1.5")
+    //// Espresso
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    // Testing fragments
+    debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
+
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
+
+    // Testing Room
+    testImplementation("androidx.room:room-testing:$roomVersion")
+
+    // Testing with Hilt
+    //// For instrumented tests.
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$hiltVersion")
+    //// ...with Kotlin.
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$hiltVersion")
+
+    // UI Automator
+    androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
 }

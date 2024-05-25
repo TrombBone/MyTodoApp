@@ -22,7 +22,7 @@ class SystemTimeChangedReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "android.intent.action.TIME_SET") {
             CoroutineScope(Dispatchers.IO + NonCancellable).launch {
-                taskRepository.allTasks.collect { tasks ->
+                taskRepository.allItems.collect { tasks ->
                     tasks.forEach { task -> notificationAlarmManager.setAlarmInFuture(task) }
                 }
             }

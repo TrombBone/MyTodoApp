@@ -22,7 +22,7 @@ class RecyclerPageViewModel @Inject constructor(
 //    private val preferenceManager: MySharedPreferenceManager
 ) : ViewModel() {
 
-    val tasks: LiveData<List<Task>> = repository.allTasks.asLiveData()
+    val tasks: LiveData<List<Task>> = repository.allItems.asLiveData()
 
     fun update(task: Task) = viewModelScope.launch(Dispatchers.IO + NonCancellable) {
         repository.update(task)

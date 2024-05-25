@@ -22,8 +22,4 @@ interface GroupDAO {
 
     @Query("SELECT * FROM groups")
     fun fetchAllGroups(): Flow<List<TasksGroup>>
-
-    @Query("SELECT COUNT(*) FROM groups")
-    fun countAllGroups(): Flow<Int>
-
  }

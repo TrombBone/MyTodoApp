@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/tasks_fragment">
+    app:startDestination="@id/all_pages_fragment">
 
     <fragment
-        android:id="@+id/tasks_fragment"
+        android:id="@+id/all_pages_fragment"
         android:name="com.example.mytodoapp.features.ui.AllPagesFragment"
-        tools:layout="@layout/fragment_tasks">
+        tools:layout="@layout/fragment_all_pages">
 
         <action
             android:id="@+id/action_tasks_fragment_to_edit_task_fragment"
@@ -23,7 +23,7 @@
 
         <action
             android:id="@+id/action_edit_task_fragment_to_tasks_fragment"
-            app:destination="@id/tasks_fragment" />
+            app:destination="@id/all_pages_fragment" />
 
     </fragment>
 

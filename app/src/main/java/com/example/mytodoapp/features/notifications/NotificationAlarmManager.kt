@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class NotificationAlarmManager @Inject constructor(
     @ApplicationContext
-    private val context: Context
+    private val context: Context,
 ) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -37,9 +37,16 @@ class NotificationAlarmManager @Inject constructor(
 
     private fun convertDueDateTimeToCalendarMillis(task: Task): Long {
         val date = task.dueDate ?: return 0L
-        val time = task.dueTime ?: LocalTime.of(0, 0)
+        val time = task.dueTime ?: LocalTime.of(0, 0, 0)
         val calendar = Calendar.getInstance()
-        calendar.set(date.year, date.monthValue - 1, date.dayOfMonth, time.hour, time.minute)
+        calendar.set(
+            date.year,
+            date.monthValue - 1,
+            date.dayOfMonth,
+            time.hour,
+            time.minute,
+            time.second
+        )
         return calendar.timeInMillis
     }
 

@@ -24,7 +24,7 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == "android.intent.action.BOOT_COMPLETED") {
             CoroutineScope(Dispatchers.IO + NonCancellable).launch {
-                taskRepository.allTasks.collect { tasks ->
+                taskRepository.allItems.collect { tasks ->
                     tasks.forEach { task -> notificationAlarmManager.setAlarmInFuture(task) }
                 }
             }

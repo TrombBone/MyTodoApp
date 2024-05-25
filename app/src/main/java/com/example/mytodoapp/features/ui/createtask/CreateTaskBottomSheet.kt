@@ -68,7 +68,9 @@ class CreateTaskBottomSheet : BaseBottomSheet() {
             }
 
             createTaskViewModel.setGroup(selectedGroupID ?: "1")
-            createTaskViewModel.setStared(setTaskStaredCheckBox.isChecked)
+            setTaskStaredCheckBox.setOnClickListener {
+                createTaskViewModel.setStared(setTaskStaredCheckBox.isChecked)
+            }
 
             showDetailsFieldButton.setOnClickListener {
                 addTaskDetailsEditText.isVisible = !addTaskDetailsEditText.isVisible

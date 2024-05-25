@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mytodoapp.R
 import com.example.mytodoapp.components.abstracts.BaseFragment
-import com.example.mytodoapp.databinding.FragmentTasksBinding
+import com.example.mytodoapp.databinding.FragmentAllPagesBinding
 import com.example.mytodoapp.features.database.entities.TasksGroup
 import com.example.mytodoapp.features.ui.createtask.CreateTaskBottomSheet
 import com.example.mytodoapp.features.ui.creategroup.CreateOrEditGroupBottomSheet
@@ -27,7 +27,7 @@ private const val KEY_LAST_SELECTED_TAB = "KEY_LAST_SELECTED_TAB"
 @AndroidEntryPoint
 class AllPagesFragment : BaseFragment() {
 
-    private var _binding: FragmentTasksBinding? = null
+    private var _binding: FragmentAllPagesBinding? = null
     private val binding get() = _binding!!
 
     private val groupsViewModel: GroupsViewModel by viewModels()
@@ -45,7 +45,7 @@ class AllPagesFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTasksBinding.inflate(inflater, container, false)
+        _binding = FragmentAllPagesBinding.inflate(inflater, container, false)
         return binding.root
     }
 

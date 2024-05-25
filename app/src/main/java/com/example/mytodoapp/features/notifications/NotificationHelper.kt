@@ -80,12 +80,11 @@ class NotificationHelper @Inject constructor(
 
     private fun contentClickIntent(): PendingIntent {
         val intent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            action = Intent.ACTION_VIEW
         }
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+        return PendingIntent.getActivity(
             context, REQUEST_CONTENT_CODE, intent, flagUpdateCurrent(false)
         )
-        return pendingIntent
     }
 
     private fun actionSetFinished(task: Task) =
