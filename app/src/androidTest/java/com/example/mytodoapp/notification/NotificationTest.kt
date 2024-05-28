@@ -60,11 +60,6 @@ class NotificationTest {
     @Before
     fun init() {
         hiltRule.inject()
-
-        runBlocking {
-            if (groupRepository.allItems.first().isEmpty())
-                groupRepository.insert(TasksGroup("1", "My Tasks"))
-        }
     }
 
     @After
@@ -122,6 +117,11 @@ class NotificationTest {
 
     @Test
     fun testNotificationActionSetFinishedClick() {
+        runBlocking {
+            if (groupRepository.allItems.first().isEmpty())
+                groupRepository.insert(TasksGroup("1", "My Tasks"))
+        }
+
         val task = createTaskAndAlarmAfterTwoSeconds()
         val taskID = task.taskID
 

@@ -5,7 +5,11 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
     id("com.google.dagger.hilt.android")
+
+    jacoco
 }
+
+apply("jacoco-report.gradle.kts")
 
 android {
     namespace = "com.example.mytodoapp"
@@ -29,6 +33,10 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            enableUnitTestCoverage = true
+            enableAndroidTestCoverage = true
+        }
     }
 
     buildFeatures {
@@ -41,6 +49,14 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    testCoverage {
+        jacocoVersion = "0.8.12"
+    }
+
+    testOptions {
+        animationsDisabled = true
     }
 }
 
@@ -67,9 +83,6 @@ dependencies {
     // ViewModel and LiveData
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
-
-    // WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     // Shared Preferences
     implementation("androidx.preference:preference-ktx:1.2.1")
@@ -124,4 +137,7 @@ dependencies {
 
     // UI Automator
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.3.0")
+
+    // Jacoco
+    androidTestImplementation("org.jacoco:org.jacoco.core:0.8.12")
 }
