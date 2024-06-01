@@ -46,7 +46,7 @@ class CreateTaskBottomSheet : BaseBottomSheet() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = BottomSheetCreateTaskBinding.inflate(inflater, container, false)
         return binding.root
@@ -67,7 +67,13 @@ class CreateTaskBottomSheet : BaseBottomSheet() {
                 createTaskViewModel.setDetails(text?.toString())
             }
 
-            createTaskViewModel.setGroup(selectedGroupID ?: "1")
+            createTaskViewModel.setGroup(
+                if (selectedGroupID == null || selectedGroupID == "0") "1"
+                else selectedGroupID!!
+            )
+
+            setTaskStaredCheckBox.isChecked = selectedGroupID == "0"
+            createTaskViewModel.setStared(setTaskStaredCheckBox.isChecked)
             setTaskStaredCheckBox.setOnClickListener {
                 createTaskViewModel.setStared(setTaskStaredCheckBox.isChecked)
             }

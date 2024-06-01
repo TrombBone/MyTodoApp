@@ -14,8 +14,8 @@ import com.example.mytodoapp.R
 import com.example.mytodoapp.components.abstracts.BaseFragment
 import com.example.mytodoapp.databinding.FragmentAllPagesBinding
 import com.example.mytodoapp.features.database.entities.TasksGroup
-import com.example.mytodoapp.features.ui.createtask.CreateTaskBottomSheet
 import com.example.mytodoapp.features.ui.creategroup.CreateOrEditGroupBottomSheet
+import com.example.mytodoapp.features.ui.createtask.CreateTaskBottomSheet
 import com.example.mytodoapp.features.ui.editgroup.GroupEditActionsBottomSheet
 import com.example.mytodoapp.features.ui.page.RecyclerPageFragment
 import com.google.android.material.tabs.TabLayout
@@ -43,7 +43,7 @@ class AllPagesFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAllPagesBinding.inflate(inflater, container, false)
         return binding.root
@@ -136,8 +136,9 @@ class AllPagesFragment : BaseFragment() {
     }
 
     private fun showCreateTaskBottomSheet() {
+        val currentItem = binding.tasksListContainerViewPager.currentItem
         val selectedGroupID =
-            allGroups[binding.tasksListContainerViewPager.currentItem - 1].taskGroupID
+            if (currentItem > 1) allGroups[currentItem - 1].taskGroupID else currentItem.toString()
         val createTaskModalBottomSheet =
             CreateTaskBottomSheet.newInstance(selectedGroupID)
         createTaskModalBottomSheet.show(

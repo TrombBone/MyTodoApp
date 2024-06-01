@@ -131,7 +131,6 @@ class NotificationHelper @Inject constructor(
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-
                 // TODO: Consider calling
                 // ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -139,9 +138,6 @@ class NotificationHelper @Inject constructor(
                 //                                        grantResults: IntArray)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    MainActivity().requestNotificationPermission()
-                }
                 return@with
             }
 

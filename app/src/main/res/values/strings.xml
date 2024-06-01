@@ -3,11 +3,13 @@
 
     <string name="tasks_list_name">Tasks</string>
 
-    <!-- used for concat and formatting -->
+    <string name="all_my_tasks">My Tasks</string>
+
     <string name="and">&#160;and&#160;</string>
     <string name="yesterday">Yesterday</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="date_at_time">%1$s at %2$s</string>
     <string name="date_and_time">%1$s, %2$s</string>
     <string name="today">Today</string>
+    <string name="choose_task_group">Choose task group</string>
 </resources>

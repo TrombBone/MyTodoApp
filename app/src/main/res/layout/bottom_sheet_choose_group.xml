@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="20dp"
-        android:text="Choose task group"
+        android:text="@string/choose_task_group"
         android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -71,18 +71,21 @@ kapt {
 dependencies {
     // Base
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
-    // Fragments
+    // Activity
+    implementation("androidx.activity:activity-ktx:1.9.0")
+
+    // Fragment
     val fragmentVersion = "1.7.1"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
 
     // ViewModel and LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.1")
 
     // Shared Preferences
     implementation("androidx.preference:preference-ktx:1.2.1")
