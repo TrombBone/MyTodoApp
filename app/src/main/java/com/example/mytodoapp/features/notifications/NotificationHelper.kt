@@ -7,19 +7,19 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.annotation.WorkerThread
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
 import com.example.mytodoapp.R
 import com.example.mytodoapp.core.activity.MainActivity
-import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver.Companion.KEY_EXTRA_TASK_ID
-import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver.Companion.TAG_ACTION_FINISH
 import com.example.mytodoapp.features.database.entities.Task
 import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver
+import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver.Companion.KEY_EXTRA_TASK_ID
+import com.example.mytodoapp.features.notifications.receivers.NotificationActionsReceiver.Companion.TAG_ACTION_FINISH
 import com.example.mytodoapp.utils.flagUpdateCurrent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.UUID
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 class NotificationHelper @Inject constructor(
     @ApplicationContext
-    private val context: Context
+    private val context: Context,
 ) {
 
     private var notificationManager: NotificationManager =
@@ -47,13 +47,11 @@ class NotificationHelper @Inject constructor(
             notificationManager.createNotificationChannel(
                 NotificationChannel(
                     STARED_CHANNEL_ID,
-                    "Important Tasks",//context.getString(R.string.channel_new_messages),
-                    // The importance must be IMPORTANCE_HIGH to show Bubbles.
+                    context.getString(R.string.notification_channel_title_important),
                     NotificationManager.IMPORTANCE_HIGH
                 ).apply {
                     description =
-                        "Test marked as important with a star"
-                    //context.getString(R.string.channel_new_messages_description)
+                        context.getString(R.string.notification_channel_description_important)
                 }
             )
         }
@@ -64,12 +62,11 @@ class NotificationHelper @Inject constructor(
             notificationManager.createNotificationChannel(
                 NotificationChannel(
                     REGULAR_CHANNEL_ID,
-                    "Regular Tasks",//context.getString(R.string.channel_new_messages),
+                    context.getString(R.string.notification_channel_title_regular),
                     NotificationManager.IMPORTANCE_DEFAULT
                 ).apply {
                     description =
-                        "All of the tasks, not marked as important with a star"
-                    //context.getString(R.string.channel_new_messages_description)
+                        context.getString(R.string.notification_channel_description_regular)
                 }
             )
         }
@@ -90,7 +87,7 @@ class NotificationHelper @Inject constructor(
     private fun actionSetFinished(task: Task) =
         NotificationCompat.Action.Builder(
             IconCompat.createWithResource(context, R.drawable.ic_check_24),
-            "Mark task ready"/*getString(context, R.string)*/,
+            getString(context, R.string.mark_task_ready),
             markTaskReadyIntent(task)
         ).build()
 
@@ -160,8 +157,6 @@ class NotificationHelper @Inject constructor(
     }*/
 
     companion object {
-        const val NOTIFICATION_REQUEST_PERMISSION_CODE = 1
-
         private const val STARED_CHANNEL_ID = "STARED_CHANNEL_ID"
         private const val REGULAR_CHANNEL_ID = "REGULAR_CHANNEL_ID"
 

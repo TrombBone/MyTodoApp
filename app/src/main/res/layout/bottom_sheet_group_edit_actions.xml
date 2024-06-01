@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="20dp"
-        android:text="Choose action for current group"
+        android:text="@string/choose_action_current_group"
         android:textSize="20sp" />
 
     <com.google.android.material.button.MaterialButton
@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="Edit current group title" />
+        android:text="@string/edit_current_group_title" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/delete_group_button"
@@ -32,6 +32,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:text="Delete current group" />
+        android:text="@string/delete_current_group" />
 
 </LinearLayout>

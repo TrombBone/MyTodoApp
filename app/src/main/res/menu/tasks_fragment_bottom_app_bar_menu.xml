@@ -5,15 +5,15 @@
 <!--    <item
         android:id="@+id/sort_tasks"
         android:icon="@drawable/ic_sort_24"
-        android:contentDescription="TODO"
+        android:contentDescription=""
         android:title=""
         app:showAsAction="ifRoom"/> -->
 
     <item
         android:id="@+id/group_actions"
         android:icon="@drawable/ic_more_vert_24"
-        android:contentDescription="TODO"
-        android:title=""
+        android:contentDescription="@string/content_description_choose_group_action"
+        android:title="@string/content_description_choose_group_action"
         app:showAsAction="ifRoom"/>
 
 </menu>

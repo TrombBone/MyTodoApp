@@ -4,13 +4,15 @@
 
     <item
         android:id="@+id/stared"
+        android:contentDescription="@string/content_description_set_stared_button"
         android:icon="@drawable/ic_star_outline_24"
-        android:title=""
+        android:title="@string/mark_stared"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/delete"
-        android:title="Delete"
+        android:contentDescription="@string/content_description_delete_task"
+        android:title="@string/delete"
         app:showAsAction="never" />
 
 </menu>

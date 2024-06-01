@@ -28,7 +28,7 @@ import java.time.LocalTime
 
 @AndroidEntryPoint
 class EditTaskFragment : BaseFragment() {
-    private var allGroups = listOf<TasksGroup>(TasksGroup("1", "My Tasks"))
+    private var allGroups = listOf(TasksGroup("1", "My Tasks"))
 
     private var _binding: FragmentEditTaskBinding? = null
     private val binding get() = _binding!!
@@ -60,7 +60,7 @@ class EditTaskFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEditTaskBinding.inflate(inflater, container, false)
         return binding.root
@@ -106,15 +106,17 @@ class EditTaskFragment : BaseFragment() {
                             binding.editTaskDetailsEditText.setStrikeThroughEffect(isFinished)
                         }
 
-                        // FIXME: Text from res
-                        binding.readyTaskFloatingActionButton.text =
-                            if (isFinished) "Task no ready yet" else "Task ready"
+                        binding.readyTaskFloatingActionButton.text = resources.getString(
+                            if (isFinished) R.string.mark_task_not_ready_yet
+                            else R.string.mark_task_ready
+                        )
 
                         binding.readyTaskFloatingActionButton.setOnClickListener {
                             editTaskViewModel.setFinished(!isFinished)
-                            // FIXME: Text from res
-                            binding.readyTaskFloatingActionButton.text =
-                                if (!isFinished) "Task no ready yet" else "Task ready"
+                            binding.readyTaskFloatingActionButton.text = resources.getString(
+                                if (!isFinished) R.string.mark_task_ready
+                                else R.string.mark_task_not_ready_yet
+                            )
                             binding.editTaskTitleEditText.setStrikeThroughEffect(!isFinished)
                             if (hasDetails())
                                 binding.editTaskDetailsEditText.setStrikeThroughEffect(!isFinished)
@@ -173,12 +175,12 @@ class EditTaskFragment : BaseFragment() {
 
     private fun showConfirmDeleteDialog(toDeleteTask: Task) {
         MaterialAlertDialogBuilder(requireContext())
-            // FIXME: Text from res
-            .setTitle(/*resources.getString(R.string.title)*/"Are you sure you want to delete this task?")
-            .setNeutralButton(/*resources.getString(R.string.cancel)*/"Cancel") { dialog, _ ->
+            .setTitle(resources.getString(R.string.alert_delete_task_title))
+            .setMessage(resources.getString(R.string.alert_delete_task_message))
+            .setNeutralButton(resources.getString(R.string.alert_cancel_button)) { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton(/*resources.getString(R.string.accept)*/"Accept") { dialog, _ ->
+            .setPositiveButton(resources.getString(R.string.alert_confirm_button)) { dialog, _ ->
                 editTaskViewModel.delete(toDeleteTask)
                 editTaskViewModel.dismissNotificationOnDeletedTask(toDeleteTask)
                 navigateUpToTasksFragment()

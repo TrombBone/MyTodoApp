@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import com.example.mytodoapp.R
 import com.example.mytodoapp.databinding.DialogDateTimePickerBinding
 import com.example.mytodoapp.features.database.converters.DateTimeConverter
 import com.example.mytodoapp.features.database.entities.Task
@@ -64,7 +65,7 @@ class DateTimePickerDialog : DialogFragment() {
 
         return MaterialAlertDialogBuilder(requireContext()).apply {
             setView(binding.root)
-            setPositiveButton(/*R.string.confirm*/"Confirm") { dialog, _ ->
+            setPositiveButton(resources.getString(R.string.alert_confirm_button)) { dialog, _ ->
                 date = selectedDate
                 setFragmentResult(
                     KEY_RESULT_FROM_DATETIME, bundleOf(
@@ -74,7 +75,7 @@ class DateTimePickerDialog : DialogFragment() {
                 )
                 dialog.dismiss()
             }
-            setNegativeButton(/*R.string.cancel*/"Cancel") { dialog, _ ->
+            setNegativeButton(resources.getString(R.string.alert_cancel_button)) { dialog, _ ->
                 dialog.cancel()
             }
 
@@ -123,9 +124,9 @@ class DateTimePickerDialog : DialogFragment() {
     }
 
     private fun updateSetTimeButtonText(button: MaterialButton, time: LocalTime?) {
-        // FIXME: text from res
         button.text =
-            if (time == null) "Set time" else Task(dueTime = time).formatDueTime(requireContext())
+            if (time == null) resources.getString(R.string.set_time)
+            else Task(dueTime = time).formatDueTime(requireContext())
     }
 
     private fun dateToMillisToCalendarView(date: LocalDate): Long {

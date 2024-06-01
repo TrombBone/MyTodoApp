@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Todo</string>
 
@@ -5,11 +6,53 @@
 
     <string name="all_my_tasks">My Tasks</string>
 
-    <string name="and">&#160;and&#160;</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+
+    <string name="choose_task_group">Choose task group</string>
+    <string name="hint_enter_group_title">Enter group title</string>
+    <string name="hint_enter_task_title">Enter task title</string>
+    <string name="hint_enter_task_details">Enter task details</string>
+
+    <string name="choose_action_current_group">Choose action for current group</string>
+    <string name="edit_current_group_title">Edit current group title</string>
+    <string name="delete_current_group">Delete current group</string>
+
+    <string name="set_date_time">Set date/time</string>
+    <string name="mark_task_ready">Task ready</string>
+    <string name="mark_task_not_ready_yet">Task not ready yet</string>
+
+    <string name="mark_stared">Mark as important</string>
+
+    <string name="set_time">Set time</string>
+
+    <string name="alert_cancel_button">Cancel</string>
+    <string name="alert_confirm_button">Confirm</string>
+    <string name="alert_delete_task_title">Deleting task</string>
+    <string name="alert_delete_task_message">Are you sure that you want to permanently delete this task?</string>
+    <string name="alert_delete_group_title">Deleting group</string>
+    <string name="alert_delete_group_message">Are you sure that you want to permanently delete this group?</string>
+
+    <string name="notification_channel_title_important">Important notifications</string>
+    <string name="notification_channel_description_important">Notifications from tasks mark as important with a star</string>
+    <string name="notification_channel_title_regular">Regular notifications</string>
+    <string name="notification_channel_description_regular">Notifications from standard tasks</string>
+
+    <string name="and">&#160; and &#160;</string>
     <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
     <string name="date_at_time">%1$s at %2$s</string>
     <string name="date_and_time">%1$s, %2$s</string>
-    <string name="today">Today</string>
-    <string name="choose_task_group">Choose task group</string>
+
+    <string name="content_description_set_datetime_button">Set date and time</string>
+    <string name="content_description_show_details_button">Show details</string>
+    <string name="content_description_set_stared_button">Set task as important</string>
+    <string name="content_description_save_task_button">Save task</string>
+    <string name="content_description_create_task">Create task</string>
+    <string name="content_description_create_task_group">Create task group</string>
+    <string name="content_description_choose_group_action">Group actions</string>
+    <string name="content_description_choose_group">Choose group</string>
+    <string name="content_description_delete_task">Delete task</string>
+
 </resources>

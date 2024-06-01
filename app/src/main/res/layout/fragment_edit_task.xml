@@ -36,6 +36,7 @@
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/content_description_choose_group"
                 android:gravity="start|center"
                 app:icon="@drawable/ic_arrow_drop_down_24"
                 app:iconGravity="textEnd"
@@ -48,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:hint="Enter task title"
+                android:hint="@string/hint_enter_task_title"
                 android:padding="10dp"
                 android:textSize="30sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +62,7 @@
                 android:background="#00000000"
                 android:drawableStart="@drawable/ic_details_24"
                 android:drawablePadding="5dp"
-                android:hint="Enter task details"
+                android:hint="@string/hint_enter_task_details"
                 android:padding="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_task_title_editText" />
@@ -71,8 +72,9 @@
                 style="@style/Widget.Material3.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/content_description_set_datetime_button"
                 android:gravity="start|center"
-                android:text="Set date/time"
+                android:text="@string/set_date_time"
                 app:icon="@drawable/ic_time_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edit_task_details_editText" />
@@ -93,7 +95,7 @@
         style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Task ready"
+        android:text="@string/mark_task_ready"
         app:layout_anchor="@id/edit_task_bottom_appbar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

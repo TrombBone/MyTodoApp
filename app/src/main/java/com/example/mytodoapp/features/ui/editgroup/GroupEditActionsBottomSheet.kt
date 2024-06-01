@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.example.mytodoapp.R
 import com.example.mytodoapp.components.abstracts.BaseBottomSheet
 import com.example.mytodoapp.databinding.BottomSheetGroupEditActionsBinding
 import com.example.mytodoapp.features.database.entities.Task
@@ -81,12 +82,12 @@ class GroupEditActionsBottomSheet : BaseBottomSheet() {
 
     private fun showConfirmDeleteDialog(toDeleteGroup: TasksGroup) {
         MaterialAlertDialogBuilder(requireContext())
-            // FIXME: Text from res
-            .setTitle(/*resources.getString(R.string.title)*/"Are you sure you want to delete this group?")
-            .setNeutralButton(/*resources.getString(R.string.cancel)*/"Cancel") { dialog, _ ->
+            .setTitle(resources.getString(R.string.alert_delete_group_title))
+            .setMessage(resources.getString(R.string.alert_delete_group_message))
+            .setNeutralButton(resources.getString(R.string.alert_cancel_button)) { dialog, _ ->
                 dialog.dismiss()
             }
-            .setPositiveButton(/*resources.getString(R.string.accept)*/"Accept") { dialog, _ ->
+            .setPositiveButton(resources.getString(R.string.alert_confirm_button)) { dialog, _ ->
                 tasksSelectedGroup.forEach {
                     deleteGroupViewModel.updateTaskGroupID(it.copy(groupID = "1"))
                 }

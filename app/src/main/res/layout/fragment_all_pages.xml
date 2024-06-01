@@ -74,13 +74,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:menu="@menu/tasks_fragment_bottom_app_bar_menu"/>
+        app:menu="@menu/tasks_fragment_bottom_app_bar_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_task_floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="TODO"
+        android:contentDescription="@string/content_description_create_task"
         app:layout_anchor="@id/tasks_bottom_appbar"
         app:srcCompat="@drawable/ic_add_24" />
 

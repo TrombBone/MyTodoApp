@@ -80,7 +80,7 @@ class EditTaskFragmentTest {
         // Text hardcode!
         openActionBarOverflowOrOptionsMenu(ApplicationProvider.getApplicationContext())
 
-        onView(withText("Delete")).perform(click())
+        onView(withId(R.id.delete)).perform(click())
 
         onView(withText("Cancel")).check(matches(isDisplayed()))
     }
@@ -110,7 +110,7 @@ class EditTaskFragmentTest {
     @Test
     fun testShowDateTimePickerDialog() {
         with(onView(withId(R.id.edit_dateTime_button))) {
-            check(matches(withText("Set date/time")))
+            check(matches(withText(R.string.set_date_time)))
             perform(click())
         }
         onView(withId(R.id.date_time_picker_dialog)).check(matches(isDisplayed()))
@@ -130,7 +130,7 @@ class EditTaskFragmentTest {
         }
 
         with(onView(withId(R.id.ready_task_floating_action_button))) {
-            check(matches(withText("Task ready")))
+            check(matches(withText(R.string.mark_task_ready)))
             perform(click())
         }
 

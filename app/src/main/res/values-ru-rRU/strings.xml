@@ -2,14 +2,57 @@
 <resources>
     <string name="app_name">Напоминалка</string>
 
+    <string name="tasks_list_name">Задачи</string>
+
     <string name="all_my_tasks">Мои задачи</string>
 
-    <string name="tasks_list_name">Задачи</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+
+    <string name="choose_task_group">Выберите группу задачи</string>
+    <string name="hint_enter_group_title">Введите название группы</string>
+    <string name="hint_enter_task_title">Введите название задачи</string>
+    <string name="hint_enter_task_details">Введите описание задачи</string>
+
+    <string name="choose_action_current_group">Выберите действие над текущей группой</string>
+    <string name="edit_current_group_title">Изменить название группы</string>
+    <string name="delete_current_group">Удалить текущую группу</string>
+
+    <string name="set_date_time">Установить дату/время</string>
+    <string name="mark_task_ready">Задача выполнена</string>
+    <string name="mark_task_not_ready_yet">Задача ещё не выполнена</string>
+
+    <string name="mark_stared">Пометить важной</string>
+
+    <string name="set_time">Установить время</string>
+
+    <string name="alert_cancel_button">Отменить</string>
+    <string name="alert_confirm_button">Подтвердить</string>
+    <string name="alert_delete_task_title">Удаление задачи</string>
+    <string name="alert_delete_task_message">Вы уверены, что хотите безвозвратно удалить эту задачу?</string>
+    <string name="alert_delete_group_title">Удаление группы</string>
+    <string name="alert_delete_group_message">Вы уверены, что хотите безвозвратно удалить эту группу?</string>
+
+    <string name="notification_channel_title_important">Важные напоминания</string>
+    <string name="notification_channel_description_important">Уведомления от важных задач, помеченных с помощью звезды</string>
+    <string name="notification_channel_title_regular">Стандартные напоминания</string>
+    <string name="notification_channel_description_regular">Уведомления от стандарных задач</string>
+
     <string name="and">&#160; и &#160;</string>
     <string name="yesterday">Вчера</string>
     <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
     <string name="date_at_time">%1$s в %2$s</string>
     <string name="date_and_time">%1$s, %2$s</string>
-    <string name="tomorrow">Завтра</string>
-    <string name="choose_task_group">Выберите группу задачи</string>
+
+    <string name="content_description_set_datetime_button">Установить дату и время</string>
+    <string name="content_description_show_details_button">Показать описание</string>
+    <string name="content_description_set_stared_button">Пометить задачу как важную</string>
+    <string name="content_description_save_task_button">Сохранить задачу</string>
+    <string name="content_description_create_task">Создать задачу</string>
+    <string name="content_description_create_task_group">Создать группу задач</string>
+    <string name="content_description_choose_group_action">Действия над группой</string>
+    <string name="content_description_choose_group">Выберите группу</string>
+    <string name="content_description_delete_task">Удалить задачу</string>
+
 </resources>
